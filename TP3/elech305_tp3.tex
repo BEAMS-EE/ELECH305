@@ -1,0 +1,191 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsthm} %numéroter les questions
+\usepackage[frenchb]{babel}
+\usepackage{datetime}
+\usepackage{xspace} % typographie IN
+\usepackage[hidelinks]{hyperref}% hyperliens
+\usepackage[all]{hypcap} %lien pointe en haut des figures
+\usepackage[french]{varioref} %voir x p y
+\usepackage{fancyhdr}% en têtes
+%\input cyracc.def
+\usepackage{graphicx} %include pictures
+\usepackage{pgfplots}
+
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{babel}
+\usepackage{circuitikz}
+% \usepackage{gnuplottex}
+\usepackage{float}
+\usepackage{ifthen}
+
+\usepackage[top=1.3 in, bottom=1.3 in, left=1.3 in, right=1.3 in]{geometry} % Yeah, that's bad to play with margins
+\usepackage[]{pdfpages}
+\usepackage[]{attachfile}
+
+\usepackage{amsmath}
+\usepackage{enumitem}
+\setlist[enumerate]{label=\alph*)}% If you want only the x-th level to use this format, use '[enumerate,x]'
+\usepackage{multirow}
+
+\newcommand\version{v1.0.0}
+
+%cyr
+\newcommand\textcyr[1]{{\fontencoding{OT2}\fontfamily{wncyr}\selectfont #1}}
+
+%Numero du TP :
+\def \tpnumber {TP 3 }
+
+\newboolean{corrige}
+\ifx\correction\undefined
+\setboolean{corrige}{false}% pas de corrigé
+\else
+\setboolean{corrige}{true}%corrigé
+\fi
+
+%\setboolean{corrige}{false}% pas de corrigé
+
+\newboolean{annexes}
+\setboolean{annexes}{true}%annexes
+%\setboolean{annexes}{false}% pas de annexes
+
+\definecolor{darkblue}{rgb}{0,0,0.5}
+
+\newboolean{mos}
+%\setboolean{mos}{true}%annexes
+\setboolean{mos}{false}% pas de annexes
+
+\usepackage{aeguill} %guillemets
+
+%% fancy header & foot
+\pagestyle{fancy}
+\lhead{[ELEC-H-305] Circuits logiques et numériques\\ \tpnumber}
+\rhead{\version\\ page \thepage}
+\chead{\ifthenelse{\boolean{corrige}}{Corrigé}{}}
+\cfoot{}
+%%
+
+\pdfinfo{
+/Author (Quentin Delhaye, ULB -- BEAMS)
+/Title (\tpnumber, ELEC-H-305)
+/ModDate (D:\pdfdate)
+}
+
+\hypersetup{
+pdftitle={\tpnumber [ELEC-H-305] Choucroute logique et numérique},
+pdfauthor={Quentin Delhaye, ULB -- BEAMS  },
+pdfsubject={}
+}
+
+\theoremstyle{definition}% questions pas en italique
+\newtheorem{Q}{Question}[] % numéroter les questions [section] ou non []
+
+\newcommand{\reponse}[1]{% pour intégrer une réponse : \reponse{texte} : sera inclus si \boolean{corrige}
+	\ifthenelse {\boolean{corrige}} {\paragraph{Réponse :} \color{darkblue}   #1\color{black}} {}
+ }
+
+\newcommand{\addcontentslinenono}[4]{\addtocontents{#1}{\protect\contentsline{#2}{#3}{#4}{}}}
+
+\date{}
+\title{\vspace{-2cm}Circuits logiques et numériques [ELEC-H-305] \\  \tpnumber \ifthenelse{\boolean{corrige}}{-- Corrigé}{} \\ \small{\version}}
+
+\setlength{\parskip}{0.2cm plus2mm minus1mm} %espacement entre §
+\setlength{\parindent}{0pt}
+
+\begin{document}
+% \pagestyle{empty}
+\maketitle
+\vspace*{-1cm}
+
+
+
+\textit{Note : On adopte la convention de notation suivante~: $\overline{ab} = \overline{a} \cdot \overline{b}$ et $\overline{(ab)} = \overline{a} + \overline{b}$.}
+
+\begin{Q}
+Par comparaison des tables de vérité, prouver les égalités suivantes.
+
+\begin{enumerate}
+	\item $\overline{a}c + \overline{abc} = \overline{ab} + \overline{a}c$
+	\reponse{~\\
+
+		\renewcommand{\arraystretch}{1.3} %Allonge légèrement la hauteur des lignes pour qu'on puisse voir les barres au-dessus des variables.
+		\begin{tabular}{|c|c|c|c|c|c|c|c|c|} \hline
+		$a$ & $b$ & $c$ & $\overline{a}c$ & $\overline{abc}$ & $F_1$ & $\overline{ab}$ & $\overline{a}c$ & $F_2$ \\ \hline
+		0 & 0 & 0 & 0 & 1 & 1 & 1 & 0 & 1 \\ \hline
+		0 & 0 & 1 & 1 & 0 & 1 & 1 & 1 & 1 \\ \hline
+		0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ \hline
+		0 & 1 & 1 & 1 & 0 & 1 & 0 & 1 & 1 \\ \hline
+		1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ \hline
+		1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ \hline
+		1 & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 \\ \hline
+		\end{tabular}
+	}
+	
+	\item $ac + \overline{a}b + b\overline{c} = ac + b$
+	\reponse{~\\
+
+		\renewcommand{\arraystretch}{1.3} %Allonge légèrement la hauteur des lignes pour qu'on puisse voir les barres au-dessus des variables.
+		\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|} \hline
+		$a$ & $b$ & $c$ & $ac$ & $\overline{a}b$ & $b\overline{c}$ & $F_1$ & $ac$ & $b$ & $F_2$ \\ \hline
+		0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ \hline
+		0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ \hline
+		0 & 1 & 0 & 0 & 1 & 1 & 1 & 0 & 1 & 1 \\ \hline
+		0 & 1 & 1 & 0 & 1 & 0 & 1 & 0 & 1 & 1 \\ \hline
+		1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ \hline
+		1 & 0 & 1 & 1 & 0 & 0 & 1 & 1 & 0 & 1 \\ \hline
+		1 & 1 & 0 & 0 & 0 & 1 & 1 & 0 & 1 & 1 \\ \hline
+		1 & 1 & 1 & 1 & 0 & 0 & 1 & 1 & 1 & 1 \\ \hline
+		\end{tabular}
+	}
+
+	\item $\overline{( (\overline{a}+\overline{b}) (ab+\overline{c}) )} = ab + c$
+	\reponse{~\\
+
+		\renewcommand{\arraystretch}{1.3} %Allonge légèrement la hauteur des lignes pour qu'on puisse voir les barres au-dessus des variables.
+		\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|} \hline
+		$a$ & $b$ & $c$ & $\overline{a} + \overline{b}$ & $ab + \overline{c}$ & $(\overline{a}+\overline{b}) (ab+\overline{c})$ & $F_1$ & $ab$ & $c$ & $F_2$ \\ \hline
+		0 & 0 & 0 & 1 & 1 & 1 & 0 & 0 & 0 & 0 \\ \hline
+		0 & 0 & 1 & 1 & 0 & 0 & 1 & 0 & 1 & 1 \\ \hline
+		0 & 1 & 0 & 1 & 1 & 1 & 0 & 0 & 0 & 0 \\ \hline
+		0 & 1 & 1 & 1 & 0 & 0 & 1 & 0 & 1 & 1 \\ \hline
+		1 & 0 & 0 & 1 & 1 & 1 & 0 & 0 & 0 & 0 \\ \hline
+		1 & 0 & 1 & 1 & 0 & 0 & 1 & 0 & 1 & 1 \\ \hline
+		1 & 1 & 0 & 0 & 1 & 0 & 1 & 1 & 0 & 1 \\ \hline
+		1 & 1 & 1 & 0 & 1 & 0 & 1 & 1 & 1 & 1 \\ \hline
+		\end{tabular}
+	}
+\end{enumerate}
+\end{Q}
+
+
+
+
+
+\begin{Q}
+Simplifier les expressions suivantes par manipulations algébriques.
+
+\begin{enumerate}
+	\item $(a+b)(a+\overline{b})$
+	\reponse{
+		\begin{align*}
+			x + x & = (x + x) \cdot 1&\mbox{, A2b}\\
+			& = (x + x) \cdot (x + \overline{x})&\mbox{, A5a}\\
+			& = x + x \cdot \overline{x}&\mbox{, A3b}\\
+			& = x + 0 & \mbox{, A5b}\\
+			& = x &\mbox{, A2a}
+		\end{align*}
+	}
+	\item $a+\overline{a}b$
+	\item $\overline{ab}c + \overline{abc} + \overline{a}b\overline{c}$
+	\item $\overline{( (a+b) \overline{cd} + e + \overline{f} )}$
+	\item $\overline{a}bc + a\overline{bc} + \overline{abc} + a\overline{b}c + abc$
+	\item $\overline{( ab + ac )} + \overline{ab}c$
+	\item $\overline{( a+b )}\overline{( \overline{a} + b )}$
+	\item $a + \overline{a}b + \overline{ab}$
+\end{enumerate}
+\end{Q}
+
+
+\end{document}
