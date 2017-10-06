@@ -1,0 +1,358 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsthm} %numéroter les questions
+\usepackage[frenchb]{babel}
+\usepackage{datetime}
+\usepackage{xspace} % typographie IN
+\usepackage[hidelinks]{hyperref}% hyperliens
+\usepackage[all]{hypcap} %lien pointe en haut des figures
+\usepackage[french]{varioref} %voir x p y
+\usepackage{fancyhdr}% en têtes
+%\input cyracc.def
+\usepackage{graphicx} %include pictures
+\usepackage{pgfplots}
+
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{babel}
+\usepackage{circuitikz}
+% \usepackage{gnuplottex}
+\usepackage{float}
+\usepackage{ifthen}
+
+\usepackage[top=1.3 in, bottom=1.3 in, left=1.3 in, right=1.3 in]{geometry} % Yeah, that's bad to play with margins
+\usepackage[]{pdfpages}
+\usepackage[]{attachfile}
+
+\usepackage{amsmath}
+\usepackage{enumitem}
+\setlist[enumerate]{label=\alph*)}% If you want only the x-th level to use this format, use '[enumerate,x]'
+\usepackage{multirow}
+
+\newcommand\version{v1.0.0}
+
+%cyr
+\newcommand\textcyr[1]{{\fontencoding{OT2}\fontfamily{wncyr}\selectfont #1}}
+
+%Numero du TP :
+\def \tpnumber {TP 2 }
+
+\newboolean{corrige}
+\ifx\correction\undefined
+\setboolean{corrige}{false}% pas de corrigé
+\else
+\setboolean{corrige}{true}%corrigé
+\fi
+
+%\setboolean{corrige}{false}% pas de corrigé
+
+\newboolean{annexes}
+\setboolean{annexes}{true}%annexes
+%\setboolean{annexes}{false}% pas de annexes
+
+\definecolor{darkblue}{rgb}{0,0,0.5}
+
+\newboolean{mos}
+%\setboolean{mos}{true}%annexes
+\setboolean{mos}{false}% pas de annexes
+
+\usepackage{aeguill} %guillemets
+
+%% fancy header & foot
+\pagestyle{fancy}
+\lhead{[ELEC-H-305] Circuits logiques et numériques\\ \tpnumber}
+\rhead{\version\\ page \thepage}
+\chead{\ifthenelse{\boolean{corrige}}{Corrigé}{}}
+\cfoot{}
+%%
+
+\pdfinfo{
+/Author (Quentin Delhaye, ULB -- BEAMS)
+/Title (\tpnumber, ELEC-H-305)
+/ModDate (D:\pdfdate)
+}
+
+\hypersetup{
+pdftitle={\tpnumber [ELEC-H-305] Choucroute logique et numérique},
+pdfauthor={Quentin Delhaye, ULB -- BEAMS  },
+pdfsubject={}
+}
+
+\theoremstyle{definition}% questions pas en italique
+\newtheorem{Q}{Question}[] % numéroter les questions [section] ou non []
+
+\newcommand{\reponse}[1]{% pour intégrer une réponse : \reponse{texte} : sera inclus si \boolean{corrige}
+	\ifthenelse {\boolean{corrige}} {\paragraph{Réponse :} \color{darkblue}   #1\color{black}} {}
+ }
+
+\newcommand{\addcontentslinenono}[4]{\addtocontents{#1}{\protect\contentsline{#2}{#3}{#4}{}}}
+
+\date{}
+\title{\vspace{-2cm}Circuits logiques et numériques [ELEC-H-305] \\  \tpnumber : Théorèmes de l'algèbre de Boole \ifthenelse{\boolean{corrige}}{-- Corrigé}{} \\ \small{\version}}
+
+\setlength{\parskip}{0.2cm plus2mm minus1mm} %espacement entre §
+\setlength{\parindent}{0pt}
+
+\begin{document}
+% \pagestyle{empty}
+\maketitle
+\vspace*{-1cm}
+
+
+
+
+
+\begin{Q}
+\textbf{Codes pondérés}
+\begin{enumerate}
+	\item Comment se représentent les chiffres 0 \dots 9 dans le code auto-complémentaire 1224 ?
+	\reponse{
+	Un code « 1224 » signifie une représentation sur quatre bits ayant pour poids 1, 2, 2 et 4 (du MSB vers le LSB).
+	Étant donné que chaque poids de chaque nombre codé est une valeur binaire naturelle, ce code est « pondéré ».
+	Pour qu'il soit auto-complémentaire, le 0 codé doit être le complémentaire du 9 codé, le 1 codé celui du 8 codé, etc. (\textit{Notez que le code BCD est certes pondéré, mais il n'est pas auto-complémentaire.})
+
+	En suivant ces propriétés, on peut trouver deux codages 1224 adéquats~:
+		\begin{center}
+			\begin{tabular}{c|c}
+			Base 10 & Code 1224 \\ \hline
+			0 & 0000 \\
+			1 & 1000 \\
+			2 & 0010 \\
+			3 & 1010 \\
+			4 & 0110 \\
+			5 & 1001 \\
+			6 & 0101 \\
+			7 & 1101 \\
+			8 & 0111 \\
+			9 & 1111 \\
+			\end{tabular}
+			\begin{tabular}{c|c}
+			Base 10 & Code 1224 \\ \hline
+			0 & 0000 \\
+			1 & 1000 \\
+			2 & 0100 \\
+			3 & 1100 \\
+			4 & 0001 \\
+			5 & 1110 \\
+			6 & 0011 \\
+			7 & 1011 \\
+			8 & 0111 \\
+			9 & 1111 \\
+			\end{tabular}
+		\end{center}
+
+	Ce code n'est cependant pas utilisable en pratique.
+	\begin{itemize}
+		\item Avec le code du tableau de gauche, certaines additions ne sont pas cohérentes.
+		Par exemple, $2+4$ devient $0010_2 + 0110_2 = 1000_2 = 1_{10}$.
+		\item Certaines additions comme un simple $7+1$ provoquent un overflow.
+	\end{itemize}
+	}
+
+	\item Effectuer l'opération 199 + 124 après avoir représenté les nombres en BCD.
+	\reponse{
+	\begin{center}
+		\begin{tabular}{cccc|l}
+		  & 0001 & 1001 & 1001 & $199_{10}$ \\
+		+ & 0001 & 0010 & 0100 & $124_{10}$ \\ \hline
+		  & 0010 & $\underbrace{1011}_{>9}$ & $\underbrace{1101}_{>9}$ & \\
+		+ &      & 0110 & 0110 & Correction \\ \hline
+		  & $\underbrace{0011}_{3}$ & $\underbrace{0010}_{2}$ & $\underbrace{0011}_{3}$ & \\
+		\end{tabular}
+	\end{center}
+	}
+\end{enumerate}
+\end{Q}
+
+
+
+
+
+
+
+
+\begin{Q}
+\textbf{Détection d'erreurs}
+
+Les quatre mots suivants de quatre bits sont transmis : 1011, 1001, 1011 et 1101.
+Le bit le moins significatif de chaque mot est un bit de parité (impaire). %Dans la convention du cours, le bit de parité n'est pas compté dans la parité.
+Le dernier mot est composé de bits de parité (paire) portant sur les bits de même position des mots précédemment transmis.\\
+Une erreur s'est-elle produite lors de la transmission ?
+Si oui, corrigez-la.
+
+\reponse{
+\begin{center}
+	\begin{tabular}{ccccl}\cline{4-4}
+	1 & 0 & 1 & \multicolumn{1}{|c|}{1} & OK \\ \cline{2-2}
+	1 & \multicolumn{1}{|c|}{\textbf{0}} & 0 & \multicolumn{1}{|c|}{1} & $\leftarrow$ \\ \cline{2-2}
+	1 & 0 & 1 & \multicolumn{1}{|c|}{1} & OK \\ \cline{1-4}
+	\multicolumn{1}{|c}{1} & 1 & 0 & \multicolumn{1}{|c|}{1} & OK \\ \cline{1-4}
+	OK & $\uparrow$ & OK & OK & \\
+	\end{tabular}
+\end{center}
+
+La case entourée en gras devrait être un « 1 » au lieu de « 0 ».
+}
+
+\end{Q}
+
+
+\begin{Q}
+	En utilisant les axiomes prouver les théorèmes\footnote{Les théorèmes 5 et 6 peuvent être prouvés avec des tables de vérité.} :
+
+\begin{minipage}[t]{0.5\linewidth}
+	\centering Axiomes :
+	$$A1a : x \in B, y \in B \rightarrow x+y \in B$$
+	$$A1b : x \in B, y \in B \rightarrow x \cdot y \in B$$
+	$$A2a : x+0 = x$$
+	$$A2b : x \cdot 1 = x$$
+	$$A3a : x \cdot (y+z) = (x \cdot y) + (x \cdot z)$$
+	$$A3b : x+ (y \cdot z) = (x+y)(x+z)$$
+	$$A4a : x+y = y+x$$
+	$$A4b : x \cdot y = y \cdot x$$
+	$$A5a : x+\overline{x} = 1$$
+	$$A5b : x \cdot \overline{x} = 0$$
+	$$A6 : \exists x, y \in B : x \neq y$$
+\end{minipage}
+\begin{minipage}[t]{0.5\linewidth}
+	\centering Théorèmes :
+	$$T1a : x+x=x$$
+	$$T1b : x \cdot x=x$$
+	$$T2a : x+1=1$$
+	$$T2b : x \cdot 0=0$$
+	$$T3a : x+y \cdot x=x$$
+	$$T3b : x \cdot (x+y)=x$$
+	$$T4 : \overline{(\overline{x})}=x$$
+	$$T5a : (x+y)+z = x + (y+z)$$
+	$$T5b : x \cdot (y \cdot z) = (x \cdot y) \cdot z$$
+	$$T6a : \overline{(x+y)} = \overline{x} \cdot \overline{y}$$
+	$$T6b : \overline{(x \cdot y)} = \overline{x} + \overline{y}$$
+\end{minipage}
+
+\reponse{
+\begin{itemize}
+	\item $T1a : x+x=x$
+	\begin{align*}
+		x + x & = (x + x) \cdot 1&\mbox{, A2b}\\
+		& = (x + x) \cdot (x + \overline{x})&\mbox{, A5a}\\
+		& = x + x \cdot \overline{x}&\mbox{, A3b}\\
+		& = x + 0 & \mbox{, A5b}\\
+		& = x &\mbox{, A2a}
+	\end{align*}
+
+	\item $T1b : x \cdot x=x$
+	\begin{align*}
+		x \cdot x & = x \cdot x  + 0&\mbox{, A2a}\\
+		& = x\cdot x + x \cdot \overline{x} &\mbox{, A5b}\\
+		& = x \cdot (x + \overline{x}) &\mbox{, A3a} \\
+		& = x \cdot 1&\mbox{, A5a}\\
+		& = x&\mbox{, A2b}
+	\end{align*}
+
+	\item $T2a : x+1=1$
+	\begin{align*}
+		x + 1 & = (x+1) \cdot 1&\mbox{, A2b}\\
+		& = (x+1) \cdot (x+\overline{x})&\mbox{, A5a}\\
+		& = x + 1 \cdot \overline{x} &\mbox{, A3b}\\
+		& = x + \overline{x} &\mbox{, A2b}\\
+		& = 1 &\mbox{, A5a}
+	\end{align*}
+
+	\item $T2b : x \cdot 0=0$
+	\begin{align*}
+		x \cdot 0 & = x \cdot 0 + 0 &\mbox{, A2a} \\
+		& = x \cdot 0 + x \cdot \overline{x}&\mbox{, A5b} \\
+		& = x \cdot (0 + \overline{x}) &\mbox{, A3a} \\
+		& = x \cdot (\overline{x}) &\mbox{, A2a} \\
+		& = 0 &\mbox{, A5b}
+	\end{align*}
+
+	\item $T3a : x+y \cdot x=x$
+	\begin{align*}
+		x + x \cdot y & = x \cdot 1 + x \cdot y &\mbox{, A2b}\\
+		& = x \cdot (1 + y)&\mbox{, A3a}\\
+		& = x \cdot 1&\mbox{, T2a} \\
+		& = x &\mbox{, A2b}
+	\end{align*}
+
+	\item $T3b : x \cdot (x+y)=x$
+	\begin{align*}
+		x \cdot (x+y) & = (x+0) \cdot (x+y) &\mbox{, A2a}\\
+		& = x + 0 \cdot y &\mbox{, A3b}\\
+		& = x + 0 &\mbox{, T2b} \\
+		& = x &\mbox{, A2a}
+	\end{align*}
+
+	\item $T4 : \overline{(\overline{x})}=x$
+	\begin{align*}
+		\overline{(\overline{x})} & = \overline{(\overline{x})} \cdot 1 &\mbox{, A2b}\\
+		& = \overline{(\overline{x})} \cdot (x + \overline{x}) &\mbox{, A5a}\\
+		& = \overline{(\overline{x})} \cdot x + \overline{(\overline{x})} \cdot \overline{x} &\mbox{, A3a}\\
+		\mbox{En posant } y = \overline{x} : && \\
+		& = \overline{(\overline{x})} \cdot x + 0 &\mbox{, A5b}\\
+		& = \overline{(\overline{x})} \cdot x + x \cdot \overline{x} &\mbox{, A5b}\\
+		& = x\cdot (\overline{(\overline{x})} + \overline{x})&\mbox{, A3b}\\
+		\mbox{En posant } y = \overline{x} : && \\
+		& = x \cdot 1 &\mbox{, A5a}\\
+		& = x & \mbox{, A2b}
+	\end{align*}
+
+	\item $T5a : (x+y)+z = x + (y+z)$
+	\begin{center}
+		\begin{tabular}{|c|c|c|c|c|c|c|} \hline
+		x & y & z & (x+y) & \textbf{(x+y)+z} & (y+z) & \textbf{x+(y+z)} \\ \hline
+		0 & 0 & 0 & 0     & \textbf{0}       & 0     & \textbf{0} \\
+		0 & 0 & 1 & 0     & \textbf{1}       & 1     & \textbf{1} \\
+		0 & 1 & 0 & 1     & \textbf{1}       & 1     & \textbf{1} \\
+		0 & 1 & 1 & 1     & \textbf{1}		 & 1	 & \textbf{1} \\
+		1 & 0 & 0 & 1     & \textbf{1}		 & 1	 & \textbf{1} \\
+		1 & 0 & 1 & 1	  & \textbf{1} 		 & 1 	 & \textbf{1} \\
+		1 & 1 & 0 & 1	  & \textbf{1} 		 & 1	 & \textbf{1} \\
+		1 & 1 & 1 & 1	  & \textbf{1}		 & 1 	 & \textbf{1} \\ \hline
+		\end{tabular}
+	\end{center}
+
+	\item $T5b : x \cdot (y \cdot z) = (x \cdot y) \cdot z$
+	\begin{center}
+		\begin{tabular}{|c|c|c|c|c|c|c|} \hline
+		x & y & z & $(y \cdot z)$ & \textbf{$x \cdot (y \cdot z)$} & $(x \cdot y)$ & \textbf{$(x \cdot y) \cdot z$} \\ \hline
+		0 & 0 & 0 & 0           & \textbf{0}                   & 0           & \textbf{0} \\
+		0 & 0 & 1 & 0           & \textbf{0}                   & 0           & \textbf{0} \\
+		0 & 1 & 0 & 0           & \textbf{0}                   & 0           & \textbf{0} \\
+		0 & 1 & 1 & 1           & \textbf{0}                   & 0           & \textbf{0} \\
+		1 & 0 & 0 & 0           & \textbf{0}                   & 0           & \textbf{0} \\
+		1 & 0 & 1 & 0           & \textbf{0}                   & 0           & \textbf{0} \\
+		1 & 1 & 0 & 0           & \textbf{0}                   & 1           & \textbf{0} \\
+		1 & 1 & 1 & 1           & \textbf{1}                   & 1           & \textbf{1} \\ \hline
+		\end{tabular}
+	\end{center}
+
+	\item $T6a : \overline{(x+y)} = \overline{x} \cdot \overline{y}$
+	\begin{center}
+	\renewcommand{\arraystretch}{1.3}
+		\begin{tabular}{|c|c|c|c|} \hline
+		x & y & \textbf{$\overline{(x+y)}$} & \textbf{$\overline{x} \cdot \overline{y}$} \\ \hline
+		0 & 0 & \textbf{1} & \textbf{1} \\
+		0 & 1 & \textbf{0} & \textbf{0} \\
+		1 & 0 & \textbf{0} & \textbf{0} \\
+		1 & 1 & \textbf{0} & \textbf{0} \\ \hline
+		\end{tabular}
+	\end{center}
+
+	\item $T6b : \overline{(x \cdot y)} = \overline{x} + \overline{y}$
+	\begin{center}
+	\renewcommand{\arraystretch}{1.3}
+		\begin{tabular}{|c|c|c|c|} \hline
+		x & y & \textbf{$\overline{(x \cdot y)}$} & \textbf{$\overline{x} + \overline{y}$} \\ \hline
+		0 & 0 & \textbf{1} & \textbf{1} \\
+		0 & 1 & \textbf{1} & \textbf{1} \\
+		1 & 0 & \textbf{1} & \textbf{1} \\
+		1 & 1 & \textbf{0} & \textbf{0} \\ \hline
+		\end{tabular}
+	\end{center}
+\end{itemize}
+}
+\end{Q}
+
+\end{document}
