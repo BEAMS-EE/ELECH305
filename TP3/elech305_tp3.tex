@@ -170,22 +170,194 @@ Simplifier les expressions suivantes par manipulations algébriques.
 	\item $(a+b)(a+\overline{b})$
 	\reponse{
 		\begin{align*}
-			x + x & = (x + x) \cdot 1&\mbox{, A2b}\\
-			& = (x + x) \cdot (x + \overline{x})&\mbox{, A5a}\\
-			& = x + x \cdot \overline{x}&\mbox{, A3b}\\
-			& = x + 0 & \mbox{, A5b}\\
-			& = x &\mbox{, A2a}
+			(a+b)(a+\overline{b}) & = aa + a\overline{b} + ab + b\overline{b} & \mbox{, distribution} \\
+			& = aa + a\overline{b} + ab + 0 & \mbox{, $x \cdot \overline{x}$ = 1} \\
+			& = a \cdot (1 + \overline{b} + b) & \mbox{, factorisation} \\
+			& = a & \mbox{, $1 + x = 1$ et $x \cdot 1 = x$}
 		\end{align*}
 	}
+
 	\item $a+\overline{a}b$
+	\reponse{
+		\begin{align*}
+			a + \overline{a}b & = a + ab + \overline{a}b & \mbox{, $x + xy = x$}\\
+			& = a + b \cdot (a + \overline{a}) & \mbox{, factorisation}\\
+			& = a + b & \mbox{, $x + \overline{x} = 1$}
+		\end{align*}
+	}
+
 	\item $\overline{ab}c + \overline{abc} + \overline{a}b\overline{c}$
+	\reponse{
+		\begin{align*}
+		\overline{ab}c + \overline{abc} + \overline{a}b\overline{c} & = \overline{ab} \cdot (c + \overline{c}) + \overline{a}b\overline{c} & \mbox{, factorisation}\\
+		& = \overline{ab} + \overline{a}b\overline{c} & \mbox{, $x+\overline{x} = 1$} \\
+		& = \overline{a} \cdot (\overline{b} + b\overline{c}) & \mbox{, factorisation} \\
+		& = \overline{a} \cdot (\overline{b} + \overline{bc} + b\overline{c}) & \mbox{, $x + xy = x$} \\
+		& = \overline{a} \cdot (\overline{b} + \overline{c}) & \mbox{, $xy + \overline{x}y = y$} \\
+		& = \overline{ab} + \overline{ac}
+		\end{align*}
+	}
+
 	\item $\overline{( (a+b) \overline{cd} + e + \overline{f} )}$
+	\reponse{
+		\begin{align*}
+		\overline{( (a+b) \overline{cd} + e + \overline{f} )} & = \overline{( a+b )} + \overline{( \overline{cd} )} \cdot \overline{e} f & \mbox{, de Morgan} \\
+		& = \overline{ab} + \overline{ac}
+		\end{align*}
+	}
+
 	\item $\overline{a}bc + a\overline{bc} + \overline{abc} + a\overline{b}c + abc$
+	\reponse{
+		\begin{align*}
+		\overline{a}bc + a\overline{bc} + \overline{abc} + a\overline{b}c + abc & = bc \cdot (a+\overline{a}) + \overline{bc} \cdot (a+\overline{a}) + a\overline{b}c & \mbox{, factorisation} \\
+		& = bc + \overline{bc} + a\overline{b}c & \mbox{, $x + \overline{x} = 1$}
+		\end{align*}
+	}
+
 	\item $\overline{( ab + ac )} + \overline{ab}c$
+	\reponse{
+		\begin{align*}
+		\overline{( ab + ac )} + \overline{ab}c & = (\overline{a} + \overline{b}) \cdot (\overline{a} + \overline{c}) + \overline{ab}c & \mbox{, de Morgan} \\
+		& = \overline{a} + \overline{ac} + \overline{ab} + \overline{bc} + \overline{ab}c & \mbox{, distribution} \\
+		& = \overline{a} \cdot (1 + \overline{c} + \overline{b} + \overline{b}c) & \mbox{, factorisation} \\
+		& = \overline{a} + \overline{bc} & \mbox{, $1+x = 1$}
+		\end{align*}
+	}
+
 	\item $\overline{( a+b )}\overline{( \overline{a} + b )}$
+	\reponse{
+		\begin{align*}
+		\overline{( a+b )}\overline{( \overline{a} + b )} & = (\overline{ab}) \cdot (ab) & \mbox{, de Morgan} \\
+		& = 0 & \mbox{, $x \cdot \overline{x} = 0$}
+		\end{align*}
+	}
+
 	\item $a + \overline{a}b + \overline{ab}$
+	\reponse{
+		\begin{align*}
+		a + \overline{a}b + \overline{ab} & = a + \overline{a} \cdot (b + \overline{b}) & \mbox{, factorisation} \\
+		& = a + \overline{a} & \mbox{, $x + \overline{x} = 1$} \\
+		& = 1 & \mbox{, $x + \overline{x} = 1$}
+		\end{align*}
+	}
+
 \end{enumerate}
 \end{Q}
 
+
+
+\begin{Q}
+Produits de sommes (PdS) et sommes de produits (SdP).
+
+\begin{enumerate}
+	\item Si $F = \overline{a}b\overline{c} + \overline{ab}c$, calculer $F'$ sous forme de PdS et SdP.
+	\reponse{
+		\begin{itemize}
+			\item SdP~:
+				\begin{align*}
+				F' & = \overline{( \overline{a}b\overline{c} + \overline{ab}c )} \\
+				& = \overline{abc} + \overline{a}bc + a\overline{bc} + a\overline{b}c + ab\overline{c} + abc \\
+				& = \overline{abc} + \overline{a}bc + a \\
+				& = \overline{bc} + bc + a
+				\end{align*}
+			\item PdS~: Pour passer $F'$ de SdP (forme disjonctive) à PdS (forme conjonctive), on peut calculer $F''$ et appliquer le principe de dualité au résultat.
+			Si $F' = \overline{bc} + bc + a$, alors
+				\begin{align*}
+				F'' & = \overline{( \overline{bc} + bc + a )} \\
+				& = \overline{a} \cdot (b+c) \cdot (\overline{b} + \overline{c}) \\
+				& = (\overline{a}b + \overline{a}c) \cdot (\overline{b} + \overline{c}) \\
+				& = \overline{a}b\overline{b} + \overline{a}b\overline{c} + \overline{ab}c + \overline{a}c\overline{c} \\
+				& = \overline{a}b\overline{c} + \overline{ab}c
+				\end{align*}
+			Et donc le dual~: $F' = (a + \overline{b} + c) \cdot (a + b + \overline{c})$.
+		\end{itemize}
+	}
+
+	\item Transformer $(a+\overline{b}) \cdot (b+c)$ en SdP.
+	\reponse{
+		Il suffit d'appliquer la conjonction~:
+		\begin{align*}
+		(a+\overline{b}) \cdot (b+c) & = ab + ac + b\overline{b} + \overline{b}c \\
+		& = ab + ac + \overline{b}c
+		\end{align*}
+	}
+
+	\item Transformer $ab + bc + \overline{a}c$ en PdS.
+	\reponse{
+		\begin{align*}
+		F' & = \overline{( ab + bc + \overline{a}c )} \\
+		& = (\overline{a} + \overline{b}) \cdot (\overline{b} + \overline{c}) \cdot (a + \overline{c}) \\
+		& = (\overline{ab} + \overline{ac} + \overline{bb} + \overline{bc}) \cdot (a + \overline{c}) \\
+		& = a\overline{ab} + \overline{abc} + a\overline{ac} + \overline{acc} + a\overline{bb} + \overline{bbc} + a\overline{bc} + \overline{bcc} \\
+		& = \overline{abc} + \overline{ac} + a\overline{b} + \overline{bc} + a\overline{bc} + \overline{bc} \\
+		& = \overline{ac} + a\overline{b} + \overline{bc} \\
+		\Leftrightarrow F & = (a+c) \cdot (\overline{a}+b) \cdot (b+c)
+		\end{align*}
+	}
+\end{enumerate}
+\end{Q}
+
+
+
+\begin{Q}
+Écrire les expressions suivantes sous forme de mintermes.
+\begin{enumerate}
+	\item $F(a,b,c,d)=a\overline{b}c + \overline{abc} + ab\overline{c}d$
+	\reponse{
+		Écrire une fonction logique sous forme de mintermes revient à écrire sa forme disjonctive (SdP) canonique, c'est-à-dire développer tous les termes de la fonctions pour que toutes les variables apparaissent dans chaque terme.
+		\begin{multline*}
+			a\overline{b}cd + a\overline{b}c\overline{d} + \overline{ab}cd + \overline{ab}c\overline{d} + \overline{abc}d + \overline{abcd} + ab\overline{c}d
+		\end{multline*}
+	}
+	\item $F(a,b,c,d) = ab + \overline{b}c + cd$
+	\reponse{
+		\begin{multline*}
+			% & abcd + abc\overline{d} + ab\overline{c}d + ab\overline{cd} + a\overline{b}cd + a\overline{b}c\overline{d} + \\
+			% & \overline{ab}cd + \overline{ab}c\overline{d} + abcd + a\overline{b}cd + \overline{a}bcd + \overline{ab}cd
+			abcd + abc\overline{d} + ab\overline{c}d + ab\overline{cd} + a\overline{b}cd + a\overline{b}c\overline{d} + \overline{ab}cd + \overline{ab}c\overline{d} + \overline{a}bcd
+		\end{multline*}
+	}
+	\item $F(a,b,c,d) = a + d$
+	\reponse{
+		\begin{multline*}
+			abcd + abc\overline{d} + ab\overline{c}d + ab\overline{cd} + a\overline{b}cd + a\overline{b}c\overline{d} + a\overline{bc}d + a\overline{bcd} + \overline{a}bcd + \overline{a}b\overline{c}d + \overline{ab}cd + \overline{abc}d
+		\end{multline*}
+	}
+\end{enumerate}
+\end{Q}
+
+
+
+\begin{Q}
+À partir de la table de vérité, faire la liste des mintermes et des maxtermes de la fonction suivante~: $F(a,b,c,d) = ab + cd$.
+\reponse{~\\
+	\begin{tabular}{|c|c|c|c|c|} \hline
+	$a$ & $b$ & $c$ & $d$ & $F$ \\ \hline
+	0 & 0 & 0 & 0 & 0 \\ \hline
+	0 & 0 & 0 & 1 & 0 \\ \hline
+	0 & 0 & 1 & 0 & 0 \\ \hline
+	0 & 0 & 1 & 1 & 1 \\ \hline
+	0 & 1 & 0 & 0 & 0 \\ \hline
+	0 & 1 & 0 & 1 & 0 \\ \hline
+	0 & 1 & 1 & 0 & 0 \\ \hline
+	0 & 1 & 1 & 1 & 1 \\ \hline
+	1 & 0 & 0 & 0 & 0 \\ \hline
+	1 & 0 & 0 & 1 & 0 \\ \hline
+	1 & 0 & 1 & 0 & 0 \\ \hline
+	1 & 0 & 1 & 1 & 1 \\ \hline
+	1 & 1 & 0 & 0 & 1 \\ \hline
+	1 & 1 & 0 & 1 & 1 \\ \hline
+	1 & 1 & 1 & 0 & 1 \\ \hline
+	1 & 1 & 1 & 1 & 1 \\ \hline
+	\end{tabular}
+
+	\begin{itemize}
+		\item Mintermes (produit des variables tel que la fonction logique est égale à 1)~: $\overline{ab}cd$, $\overline{a}bcd$, $a\overline{b}cd$, $ab\overline{cd}$, $abc\overline{d}$, $ab\overline{c}d$, $abcd$.
+
+		\item Maxtermes (somme des variables telle que la fonction logique est égale à 0)~:	$a + b + c + d$, $a + b + c + \overline{d}$, $a + b + \overline{c} + d$, $a + \overline{b} + c + d$, $a + \overline{b} + c + \overline{d}$, $a + \overline{b} + \overline{c} + d$, $\overline{a} + b + c + d$, $\overline{a} + b + c + \overline{d}$, $\overline{a} + b + \overline{c} + d$.
+	\end{itemize}
+
+}
+\end{Q}
 
 \end{document}
