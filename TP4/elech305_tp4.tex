@@ -1,0 +1,312 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsthm} %numéroter les questions
+\usepackage[frenchb]{babel}
+\usepackage{datetime}
+\usepackage{xspace} % typographie IN
+\usepackage[hidelinks]{hyperref}% hyperliens
+\usepackage[all]{hypcap} %lien pointe en haut des figures
+\usepackage[french]{varioref} %voir x p y
+\usepackage{fancyhdr}% en têtes
+%\input cyracc.def
+\usepackage{graphicx} %include pictures
+\usepackage{pgfplots}
+
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{babel}
+\usepackage{circuitikz}
+% \usepackage{gnuplottex}
+\usepackage{float}
+\usepackage{ifthen}
+
+\usepackage[top=1.3 in, bottom=1.3 in, left=1.3 in, right=1.3 in]{geometry} % Yeah, that's bad to play with margins
+\usepackage[]{pdfpages}
+\usepackage[]{attachfile}
+
+\usepackage{amsmath}
+\usepackage{enumitem}
+\setlist[enumerate]{label=\alph*)}% If you want only the x-th level to use this format, use '[enumerate,x]'
+\usepackage{multirow}
+
+\usepackage{askmaps} % https://github.com/parastuffs/askmaps_custom
+
+\newcommand\version{v1.0.0}
+
+%cyr
+\newcommand\textcyr[1]{{\fontencoding{OT2}\fontfamily{wncyr}\selectfont #1}}
+
+%Numero du TP :
+\def \tpnumber {TP 4 }
+
+\newboolean{corrige}
+\ifx\correction\undefined
+\setboolean{corrige}{false}% pas de corrigé
+\else
+\setboolean{corrige}{true}%corrigé
+\fi
+
+%\setboolean{corrige}{false}% pas de corrigé
+
+\newboolean{annexes}
+\setboolean{annexes}{true}%annexes
+%\setboolean{annexes}{false}% pas de annexes
+
+\definecolor{darkblue}{rgb}{0,0,0.5}
+
+\newboolean{mos}
+%\setboolean{mos}{true}%annexes
+\setboolean{mos}{false}% pas de annexes
+
+\usepackage{aeguill} %guillemets
+
+%% fancy header & foot
+\pagestyle{fancy}
+\lhead{[ELEC-H-305] Circuits logiques et numériques\\ \tpnumber}
+\rhead{\version\\ page \thepage}
+\chead{\ifthenelse{\boolean{corrige}}{Corrigé}{}}
+\cfoot{}
+%%
+
+\pdfinfo{
+/Author (Quentin Delhaye, ULB -- BEAMS)
+/Title (\tpnumber, ELEC-H-305)
+/ModDate (D:\pdfdate)
+}
+
+\hypersetup{
+pdftitle={\tpnumber [ELEC-H-305] Choucroute logique et numérique},
+pdfauthor={Quentin Delhaye, ULB -- BEAMS  },
+pdfsubject={}
+}
+
+\theoremstyle{definition}% questions pas en italique
+\newtheorem{Q}{Question}[] % numéroter les questions [section] ou non []
+
+\newcommand{\reponse}[1]{% pour intégrer une réponse : \reponse{texte} : sera inclus si \boolean{corrige}
+	\ifthenelse {\boolean{corrige}} {\paragraph{Réponse :} \color{darkblue}   #1\color{black}} {}
+ }
+
+\newcommand{\addcontentslinenono}[4]{\addtocontents{#1}{\protect\contentsline{#2}{#3}{#4}{}}}
+
+\date{}
+\title{\vspace{-2cm}Circuits logiques et numériques [ELEC-H-305] \\  \tpnumber Diagrammes de Karnaugh \ifthenelse{\boolean{corrige}}{-- Corrigé}{} \\ \small{\version}}
+
+\setlength{\parskip}{0.2cm plus2mm minus1mm} %espacement entre §
+\setlength{\parindent}{0pt}
+
+\begin{document}
+% \pagestyle{empty}
+\maketitle
+\vspace*{-1cm}
+
+
+\begin{Q}
+Construire les K-Maps pour les fonctions logiques suivantes.
+\begin{enumerate}
+	\item $F(a,b) = \overline{a} \cdot (a+\overline{b}) \cdot (a+b)$
+	\reponse{
+		Afin d'établir la K-Map de la fonction logique, on peut d'abord remplir sa table de vérité~:
+		\begin{center}
+			\begin{tabular}{|c|c|c|} \hline
+			$a$ & $b$ & $F$ \\ \hline
+			0 & 0 & 0 \\ \hline
+			0 & 1 & 0 \\ \hline
+			1 & 0 & 0 \\ \hline
+			1 & 1 & 0 \\ \hline
+			\end{tabular}
+		\end{center}
+
+		Ensuite, chaque case de la K-Map correspond à une ligne de la table de vérité.
+
+		\begin{center}
+			\askmapii{}{a b}{}{0000}{}
+		\end{center}
+
+
+	}
+	\item $F(a,b,c) = (\overline{a} + bc) \cdot (a+b)$
+	\reponse{
+		\begin{center}
+			\begin{tabular}{|c|c|c|c|} \hline
+			$a$ & $b$ & $c$ & $F$ \\ \hline
+			0 & 0 & 0 & 0 \\ \hline
+			0 & 0 & 1 & 0 \\ \hline
+			0 & 1 & 0 & 1 \\ \hline
+			0 & 1 & 1 & 1 \\ \hline
+			1 & 0 & 0 & 0 \\ \hline
+			1 & 0 & 1 & 0 \\ \hline
+			1 & 1 & 0 & 0 \\ \hline
+			1 & 1 & 1 & 1 \\ \hline
+			\end{tabular}
+		\end{center}
+
+		\begin{center}
+			\askmapiii{}{a b c}{}{00110001}{}
+		\end{center}
+	}
+	\item $F(a,b,c,d) = \overline{(\overline{a} + bd)} \cdot (b+c)$
+	\reponse{
+		\begin{center}
+			\begin{tabular}{|c|c|c|c|c|} \hline
+			$a$ & $b$ & $c$ & $d$ & $F$ \\ \hline
+			0 & 0 & 0 & 0 & 0 \\ \hline
+			0 & 0 & 0 & 1 & 0 \\ \hline
+			0 & 0 & 1 & 0 & 0 \\ \hline
+			0 & 0 & 1 & 1 & 0 \\ \hline
+			0 & 1 & 0 & 0 & 0 \\ \hline
+			0 & 1 & 0 & 1 & 0 \\ \hline
+			0 & 1 & 1 & 0 & 0 \\ \hline
+			0 & 1 & 1 & 1 & 0 \\ \hline
+			1 & 0 & 0 & 0 & 0 \\ \hline
+			1 & 0 & 0 & 1 & 0 \\ \hline
+			1 & 0 & 1 & 0 & 1 \\ \hline
+			1 & 0 & 1 & 1 & 1 \\ \hline
+			1 & 1 & 0 & 0 & 1 \\ \hline
+			1 & 1 & 0 & 1 & 0 \\ \hline
+			1 & 1 & 1 & 0 & 1 \\ \hline
+			1 & 1 & 1 & 1 & 0 \\ \hline
+			\end{tabular}
+		\end{center}
+
+		\begin{center}
+			\askmapiv{}{a b c d}{}{0000000000111010}{}
+		\end{center}
+	}
+\end{enumerate}
+
+\end{Q}
+
+
+
+
+\begin{Q}
+	Simplifier $F(a,b)$ à l'aide des K-maps.
+	\begin{enumerate}
+		\item $F(a,b) = a + \overline{a}b + \overline{ab}$
+		\reponse{
+			On peut aussi remplir la K-Map en développant la fonction logique sous l'une de ses formes canoniques.
+			Par exemple, $F(a,b) = a + \overline{a}b + \overline{ab} = a\overline{b} + ab + \overline{a}b + \overline{ab}$.
+			Chaque minterme est une case de la K-Map mise à $1$.
+
+			\begin{center}
+				\askmapii{$F=1$}{a b}{}{1111}{}
+			\end{center}
+		}
+		\item $F(a,b) = (a + b) \cdot (a + \overline{b})$
+		\reponse{
+			\begin{center}
+				\askmapii{$F=a$}{a b}{}{0011}{% raise Z input
+				\color{red}\put(1.1,0.1){\dashbox{0.1}(0.8,1.8){}}%
+				}
+			\end{center}
+		}
+		\item $F(a,b) = a + \overline{a}b$
+		\reponse{
+			\begin{center}
+				\askmapii{$F=a+b$}{a b}{}{0111}{% raise Z input
+				\color{red}\put(0.1,0.1){\dashbox{0.1}(1.8,0.8){}}%
+				\color{green}\put(1.15,0.15){\dashbox{0.2}(0.7,1.7){}}%
+				}
+			\end{center}
+		}
+	\end{enumerate}
+	\reponse{}%R
+\end{Q}
+
+
+
+
+\begin{Q}
+	Simplifier $F(a,b,c)$ à l'aide des K-maps~:
+	\begin{enumerate}
+		\item $F(a,b,c) = \overline{a}c + \overline{abc}$
+		\reponse{%TODO Mettre les termes dans la même couleur que les cadres dans les K-maps.
+			\begin{center}
+				\askmapiii{$F=\overline{ab}+\overline{a}c$}{b c a}{}{10100010}{% raise Z input
+				\color{red}\put(0.1,1.1){\dashbox{0.1}(1.8,0.8){}}%
+				\color{green}\put(1.15,1.15){\dashbox{0.2}(1.7,0.7){}}%
+				}
+			\end{center}
+		}
+		\item $F(a,b,c) = a\overline{b}c + \overline{a}b\overline{c} + \overline{a}bc + \overline{ab}c$
+		\reponse{
+			\begin{center}
+				\askmapiii{$F=\overline{a}b+\overline{b}c$}{b c a}{}{00111010}{% raise Z input
+				\color{red}\put(1.1,0.1){\dashbox{0.1}(0.8,1.8){}}%
+				\color{green}\put(2.1,1.1){\dashbox{0.2}(1.8,0.8){}}%
+				}
+			\end{center}
+		}
+		\item $F(a,b,c) = ab\overline{c} + \overline{abc} + \overline{a}b\overline{c} + a\overline{bc}$
+		\reponse{
+			\begin{center}
+				\askmapiii{$F=\overline{c}$}{b c a}{}{11001100}{% raise Z input
+				\color{red}\put(0.1,0.1){\dashbox{0.1}(0.8,1.8){}}%
+				\color{red}\put(3.1,0.1){\dashbox{0.1}(0.8,1.8){}}%
+				}
+			\end{center}
+		}
+	\end{enumerate}
+	\reponse{}%
+\end{Q}
+
+
+
+
+
+\begin{Q}
+	Simplifier $F(a,b,c,d)$ à l'aide des K-maps~:
+	\begin{enumerate}
+		\item $F(a,b,c,d) = abd + acd + bcd + ab + \overline{a}cd + \overline{ab}cd$
+		\reponse{
+			\begin{center}
+				\askmapiv{$F=ab+cd$}{c d a b}{}{0001000100011111}{% raise Z input
+				\color{red}\put(0.1,1.1){\dashbox{0.1}(3.8,0.8){}}%
+				\color{green}\put(2.1,0.1){\dashbox{0.2}(0.8,3.8){}}%
+				}
+			\end{center}
+		}
+		\item $F(a,b,c,d) = \overline{abcd} + \overline{ac}d + \overline{a}b\overline{c} + abc + a\overline{b}c + abcd$
+		\reponse{
+			\begin{center}
+				\askmapiv{$F=ac+\overline{ac}$}{c d a b}{}{1100110000110011}{% raise Z input
+				\color{red}\put(0.1,2.1){\dashbox{0.1}(1.8,1.8){}}%
+				\color{green}\put(2.1,0.1){\dashbox{0.2}(1.8,1.8){}}%
+				}
+			\end{center}
+		}
+		\item $F(a,b,c,d) = \overline{bcd} + \overline{a}c\overline{d} + \overline{ac}d + a\overline{d} + \overline{a}b\overline{d}$
+		\reponse{
+			\begin{center}
+				\askmapiv{$F=\overline{d}+\overline{ac}$}{c d a b}{}{1111110011110000}{% raise Z input
+				\color{red}\put(0.1,0.1){\dashbox{0.1}(0.8,3.8){}}%
+				\color{green}\put(0.15,2.15){\dashbox{0.2}(1.7,1.7){}}%
+				\color{red}\put(3.1,0.1){\dashbox{0.1}(0.8,3.8){}}%
+				}
+			\end{center}
+		}
+	\end{enumerate}
+\end{Q}
+
+
+
+
+\begin{Q}
+	Simplifier $F(a,b,c,d,e)$ à l'aide des K-maps~:
+	\begin{enumerate}
+		\item $F(a,b,c,d,e) = a\overline{e} + b\overline{e} + a\overline{b}ce + a\overline{b}cde + a\overline{b}c\overline{e} + \overline{acde} + \overline{abe} + \overline{ab}ce$
+		\reponse{
+			\begin{center}
+				\askmapv{$F = \overline{e} + \overline{b}c$}{a b c d e}{}{10101111101010101010111110101010}{%
+				\color{red}\put(0.1,3.1){\dashbox{0.1}(7.8,0.8){}}%
+				\color{red}\put(0.1,0.1){\dashbox{0.1}(7.8,0.8){}}%
+				\color{green}\put(1.1,0.2){\dashbox{0.2}(0.8,3.6){}}%
+				\color{green}\put(5.1,0.2){\dashbox{0.2}(0.8,3.6){}}%
+				}
+			\end{center}
+		}
+	\end{enumerate}
+\end{Q}
+\end{document}
