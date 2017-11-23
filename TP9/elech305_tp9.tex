@@ -1,0 +1,613 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsthm} %numéroter les questions
+\usepackage[frenchb]{babel}
+\usepackage{datetime}
+\usepackage{xspace} % typographie IN
+\usepackage[hidelinks]{hyperref}% hyperliens
+\usepackage[all]{hypcap} %lien pointe en haut des figures
+\usepackage[french]{varioref} %voir x p y
+\usepackage{fancyhdr}% en têtes
+%\input cyracc.def
+\usepackage{graphicx} %include pictures
+\usepackage{pgfplots}
+
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows,automata}
+\usetikzlibrary{babel}
+\usepackage{circuitikz}
+% \usepackage{gnuplottex}
+\usepackage{float}
+\usepackage{ifthen}
+
+\usepackage[top=1.3 in, bottom=1.3 in, left=1.3 in, right=1.3 in]{geometry} % Yeah, that's bad to play with margins
+\usepackage[]{pdfpages}
+\usepackage[]{attachfile}
+
+\usepackage{amsmath}
+\usepackage{amssymb} % checkmark
+\usepackage{enumitem}
+\setlist[enumerate]{label=\alph*)}% If you want only the x-th level to use this format, use '[enumerate,x]'
+\usepackage[]{xcolor}
+\usepackage{colortbl}
+\usepackage{multirow}
+\usepackage{bigdelim}%Braces in tabular
+
+\usepackage{askmaps} % https://github.com/parastuffs/askmaps_custom
+
+\newcommand\encircle[1]{%http://tex.stackexchange.com/questions/123924/indexed-letters-inside-circles
+  \tikz[baseline=(X.base)] 
+    \node (X) [draw, shape=circle, inner sep=0] {\strut #1};}
+
+
+\newcommand\version{v1.0.0}
+
+%cyr
+\newcommand\textcyr[1]{{\fontencoding{OT2}\fontfamily{wncyr}\selectfont #1}}
+
+%Numero du TP :
+\def \tpnumber {TP 9 }
+
+\newboolean{corrige}
+\ifx\correction\undefined
+\setboolean{corrige}{false}% pas de corrigé
+\else
+\setboolean{corrige}{true}%corrigé
+\fi
+
+%\setboolean{corrige}{false}% pas de corrigé
+
+\newboolean{annexes}
+\setboolean{annexes}{true}%annexes
+%\setboolean{annexes}{false}% pas de annexes
+
+\definecolor{darkblue}{rgb}{0,0,0.5}
+
+\newboolean{mos}
+%\setboolean{mos}{true}%annexes
+\setboolean{mos}{false}% pas de annexes
+
+\usepackage{aeguill} %guillemets
+
+%% fancy header & foot
+\pagestyle{fancy}
+\lhead{[ELEC-H-305] Circuits logiques et numériques\\ \tpnumber}
+\rhead{\version\\ page \thepage}
+\chead{\ifthenelse{\boolean{corrige}}{Corrigé}{}}
+\cfoot{}
+%%
+
+\pdfinfo{
+/Author (Quentin Delhaye, ULB -- BEAMS)
+/Title (\tpnumber, ELEC-H-305)
+/ModDate (D:\pdfdate)
+}
+
+\hypersetup{
+pdftitle={\tpnumber [ELEC-H-305] Choucroute logique et numérique},
+pdfauthor={Quentin Delhaye, ULB -- BEAMS  },
+pdfsubject={}
+}
+
+\theoremstyle{definition}% questions pas en italique
+\newtheorem{Q}{Question}[] % numéroter les questions [section] ou non []
+
+\newcommand{\reponse}[1]{% pour intégrer une réponse : \reponse{texte} : sera inclus si \boolean{corrige}
+	\ifthenelse {\boolean{corrige}} {\paragraph{Réponse :} \color{darkblue}   #1\color{black}} {}
+ }
+
+\newcommand{\addcontentslinenono}[4]{\addtocontents{#1}{\protect\contentsline{#2}{#3}{#4}{}}}
+
+\date{}
+\title{\vspace{-2cm}Circuits logiques et numériques [ELEC-H-305] \\  \tpnumber Synthèse de circuits \ifthenelse{\boolean{corrige}}{-- Corrigé}{} \\ \small{\version}}
+
+\setlength{\parskip}{0.2cm plus2mm minus1mm} %espacement entre §
+\setlength{\parindent}{0pt}
+
+\newlength{\gvs}% Gate Vertical Space
+\gvs=6em
+\newlength{\ghs}% Gate Horizontal Space
+\ghs=10em
+
+\begin{document}
+% \pagestyle{empty}
+\maketitle
+\vspace*{-1cm}
+
+
+
+\begin{Q}
+Un système de traitement d'image fournit des points (pixels) à quatre niveaux de gris~: $ab = 00, 01, 10, 11$ (respectivement noir, foncé, clair et blanc).
+On veut construire un automate qui reçoit les valeurs de $ab$ en séquence, ligne après ligne, et met à $1$ une sortie $Z$ lorsqu'il détecte la fin d'une rampe montante ou descendante complète~: $00-01-10-11$ ou $11-10-01-00$.
+On fera l'hypothèse simplificatrice que deux pixels successifs n'auront jamais la même valeur.
+
+Dresser la table de Huffman de ce problème.
+
+\reponse{
+	\begin{center}
+		\begin{tabular}{|l|l|l|l|l|l|} \hline
+			& \multicolumn{4}{c}{$ab$} & \\ \hline
+			& 00 & 01 & 11 & 10 & $Z$ \\ \hline
+			1 & 2 & \textbf{1} & 6 & \textbf{1} & 0 \\ \hline
+			2 & \textbf{2} & 3 & 1 & 1 & 0 \\ \hline
+			3 & 1 & \textbf{3} & 1 & 4 & 0 \\ \hline
+			4 & 1 & 1 & 5 & \textbf{4} & 0 \\ \hline
+			5 & 1 & 1 & \textbf{5} & 7 & 1 \\ \hline
+			6 & 1 & 1 & \textbf{6} & 7 & 0 \\ \hline
+			7 & 1 & 8 & 1 & \textbf{7} & 0 \\ \hline
+			8 & 9 & \textbf{8} & 1 & 1 & 0 \\ \hline
+			9 & \textbf{9} & 3 & 1 & 1 & 1 \\ \hline
+		\end{tabular}
+	\end{center}
+	%TODO Table des conditions d'équivalence
+}
+\end{Q}
+
+% \begin{Q}
+% Dans la table des états de Huffman suivante~:
+% \begin{center}
+% 	\begin{tabular}{|l|l|l|l|l|l|} \hline
+% 		& \multicolumn{4}{c}{$ab$} & \\ \hline
+% 		& 00 & 01 & 11 & 10 & $Z$ \\ \hline
+% 		1 & \textbf{1} & \textbf{1} & 3 & - & 0 \\ \hline
+% 		2 & \textbf{2} & \textbf{2} & 3 & 4 & 1 \\ \hline
+% 		3 & 2 & 1 & \textbf{3} & \textbf{3} & 1 \\ \hline
+% 		4 & 1 & - & \textbf{4} & \textbf{4} & 0 \\ \hline
+% 	\end{tabular}
+% \end{center}
+% \begin{enumerate}
+% 	\item Trouver un codage n'offrant pas de problème de course.
+% 	Déterminer les fonctions de rétroactions $Y_1$ et $Y_2$.
+
+% 	\item Résoudre les problèmes de course critique si le codage~: $1=00$, $2=01$, $3=11$ et $4=10$ est imposé.
+% 	Donner les expressions pour les nouveaux $Y_1$ et $Y_2$.
+% \end{enumerate}
+% \end{Q}
+
+
+\begin{Q}
+	Deux loutres mutantes attaquent Metropolis.
+	Superman est le seul à pouvoir sauver la ville.
+	Les terribles mustélidés sont cependant particulièrement résistants et Superman décide de quérir l'aide du Dr Hamilton pour les vaincre.
+	Ce dernier lui donne alors une table de Huffman sur la sequence de pouvoirs à utiliser pour triompher ($Z_1$).
+	Cependant, il y a aussi introduit une séquence qui rendrait les loutres immortelles et leur permettrait de cracher du feu ($Z_2$).
+	La notice suivante est jointe~:
+	\begin{verse}
+		$a$~: vision laser~; $b$~: souffle glacé~; $Z_1$~: loutres vaincues~; $Z_2$~: loutres invulnérables.
+	\end{verse}
+
+	Que doit faire Superman pour sauver Metropolis des loutres infernales~?
+
+	\begin{center}
+		\begin{tabular}{|c|c|c|c|c|c|c|} \hline
+			$Y_1Y_2$& \multicolumn{4}{c|}{$ab$} & & \\ \hline
+			$y_1y_2$& 00 & 01 & 11 & 10 & $Z_1$ & $Z_2$\\ \hline
+			1 & \textbf{1} & 2 & - & 5 & 0 & 0 \\ \hline
+			2 & 1 & \textbf{2} & - & 3 & 0 & 0 \\ \hline
+			3 & 1 & 4 & - & \textbf{3} & 0 & 0 \\ \hline
+			4 & \textbf{4} & \textbf{4} & \textbf{4} & \textbf{4} & 1 & 0 \\ \hline
+			5 & 1 & 6 & - & \textbf{5} & 0 & 0\\ \hline
+			6 & 1 & \textbf{6} & - & 7 & 0 & 0 \\ \hline
+			7 & \textbf{7} & \textbf{7} & \textbf{7} & \textbf{7} & 0 & 1 \\ \hline
+		\end{tabular}
+	\end{center}
+
+	\reponse{
+		Si Superman veut éliminer ces perfides créatures, il devra d'abord les geler à l'aide de son souffle, puis les brûler avec son regard de Kryptonien et finalement les geler à nouveau.
+	}
+\end{Q}
+
+\begin{Q}
+	Selon une légende créée spécialement pour ce TP, jaloux du succès du code Konami\footnote{$\uparrow \uparrow \downarrow \downarrow \leftarrow \rightarrow \leftarrow \rightarrow$ \encircle{B} \encircle{A}}, Nintendo aurait implémenté un code similaire dans ses jeux développés sur NES.
+	Le «~code Nintendo~» serait cependant plus simple~: pour activer une fonctionnalité cachée du jeu, il suffirait d'appuyer sur le bouton \encircle{A}, puis d'appuyer sur \encircle{B} en maintenant \encircle{A} enfoncé et enfin d'appuyer sur \framebox{\textsc{select}} toujours en maintenant les deux premiers boutons enfoncés.
+	Si l'un des boutons est relâché ou enfoncé dans le mauvais ordre, la séquence est annulée.
+
+	Dresser le circuit logique du code permettant d'activer le bonus.
+
+	\reponse{
+		Afin de pouvoir créer le circuit logique, il convient d'abord de remplir la table de Huffman décrivant la séquence de boutons, et en dériver les équations logiques.
+
+		En considérant que la touche \framebox{select} est représentée par la variable $c$, on obtient~:
+		\begin{center}
+			\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}\hline
+			$Y_1Y_2$ & \multicolumn{8}{c|}{$abc$} & \\ \hline
+			$y_1y_2$ & 000 & 001 & 011 & 010 & 100 & 101 & 111 & 110 & Z \\ \hline
+			00 & \textbf{00} & \textbf{00} & \textbf{00} & \textbf{00} & 01 & \textbf{00} & \textbf{00} & \textbf{00} & 0 \\ \hline
+			01 & 00 & 00 & 00 & 00 & \textbf{01} & 00 & 00 & 11 & 0 \\ \hline
+			11 & 00 & 00 & 00 & 00 & 00 & 00 & 10 & \textbf{11} & 0 \\ \hline
+			01 & 00 & 00 & 00 & 00 & 00 & 00 & \textbf{10} & 00 & 1 \\ \hline
+			\end{tabular}
+		\end{center}
+
+		On en déduit les k-maps suivantes~:
+		\begin{center}
+			\askmapv{$Y_1 = abcy_1 + ab\overline{c}y_2$}{a b c $y_1$ $y_2$}{}{00000000000000000000000001010011}{%
+			\color{red}\put(6.1,0.1){\dashbox{0.1}(0.8,1.8){}}%
+			\color{green}\put(7.1,1.1){\dashbox{0.2}(0.8,1.8){}}%
+			}
+
+			\askmapv{$Y_2 = a\overline{bcy_1} + ab\overline{c}y_2$}{a b c $y_1$ $y_2$}{}{00000000000000001100000001010000}{%
+			\color{red}\put(4.1,2.1){\dashbox{0.1}(0.8,1.8){}}%
+			\color{green}\put(7.1,1.1){\dashbox{0.2}(0.8,1.8){}}%
+			}
+
+			\askmapv{$Z = y_1\overline{y_2}$}{a b c $y_1$ $y_2$}{}{00-000-000-000-000-000-000-0001-}{%
+			\color{red}\put(0.1,0.1){\dashbox{0.1}(7.8,0.8){}}%
+			}
+		\end{center}
+			\begin{circuitikz}[scale=0.8, every node/.style={scale=0.8}]
+			% \begin{circuitikz}
+				\draw
+				(0.5\ghs,0.5\gvs) node[not port, rotate=90] (mynotb) {}
+				(1\ghs,0.5\gvs) node[not port, rotate=90] (mynotc) {}
+				(1.5\ghs,0.5\gvs) node[not port, rotate=90] (mynoty1) {}
+				(2\ghs,0.5\gvs) node[not port, rotate=90] (mynoty2) {}
+				(2.5\ghs,1.5\gvs) node[and port] (myand11) {}%bottom left
+				(2.5\ghs,2.3\gvs) node[and port] (myand12) {}
+				(2.5\ghs,3.8\gvs) node[and port] (myand13) {}
+				(2.5\ghs,4.6\gvs) node[and port] (myand14) {}
+				(2.5\ghs,5.4\gvs) node[and port] (myand15) {}%top left
+
+				(3.5\ghs,1.9\gvs) node[and port] (myand21) {}
+				(3.5\ghs,2.7\gvs) node[and port] (myand22) {}
+				(3.5\ghs,3.8\gvs) node[and port] (myand23) {}
+				(3.5\ghs,5.0\gvs) node[and port] (myand24) {}
+
+				(4.2\ghs,2.3\gvs) node[or port] (myory2) {}% Bottom OR, Y2
+				(4.2\ghs,4.4\gvs) node[or port] (myory1) {}% Y1
+
+				(2.5\ghs,6.5\gvs) node[and port] (myandz) {}
+				(0,7\gvs) node[shape=coordinate] (top) {}
+				(0.0,0.0) node[shape=coordinate] (bottoma) {}%Bottom of line A
+
+				(bottoma |- myand12.in 1) node[shape=coordinate] (dot11) {}
+				(bottoma |- myand14.in 1) node[shape=coordinate] (dot12) {}
+				($(mynotb.in)-(0.2\ghs,0)$) node[shape=coordinate] (dot21) {}
+				(dot21 |- myand14.in 2) node[shape=coordinate] (dot22) {}
+				(mynotb |- myand12.in 2) node[shape=coordinate] (dot31) {}
+				($(mynotc.in)-(0.2\ghs,0)$) node[shape=coordinate] (dot41) {}
+				(dot41 |- myand15.in 2) node[shape=coordinate] (dot42) {}
+				(mynotc |- myand11.in 2) node[shape=coordinate] (dot51) {}
+				(dot51 |- myand13.in 2) node[shape=coordinate] (dot52) {}
+				($(mynoty1.in)-(0.2\ghs,0)$) node[shape=coordinate] (dot61) {}
+				(dot61 |- myand15.in 1) node[shape=coordinate] (dot62) {}
+				(dot61 |- myandz.in 2) node[shape=coordinate] (dot63) {}
+				(mynoty1 |- myand11.in 1) node[shape=coordinate] (dot71) {}
+				($(mynoty2.in)-(0.2\ghs,0)$) node[shape=coordinate] (dot81) {}
+				(dot81 |- myand13.in 1) node[shape=coordinate] (dot82) {}
+				(mynoty2 |- myandz.in 1) node[shape=coordinate] (dot91) {}
+
+
+				% A
+				(bottoma) to[short, -*] (dot11) to[short, -*] (dot12) {} -- (bottoma |- top)
+				(bottoma) -- +(0, -0.2\gvs)
+				(dot11) -- (myand12.in 1)
+				(dot12) -- (myand14.in 1)
+
+				% B
+				(dot21) -- +(0,-0.4\gvs)
+				(dot21) to[short, *-*] (dot22) -- (dot21 |- top)
+				(dot22) -- (myand14.in 2)
+
+				% B'
+				(mynotb.out) to[short, -*] (dot31) -- (mynotb |- top)
+				(mynotb.in) -- (dot21)
+				(dot31) -- (myand12.in 2)
+
+				% C
+				(dot41) -- +(0,-0.4\gvs)
+				(dot41) to[short, *-*] (dot42) -- (dot41 |- top)
+				(dot42) -- (myand15.in 2)
+
+				% C'
+				(mynotc.out) to[short, -*] (dot51) to[short, -*] (dot52) -- (mynotc |- top)
+				(mynotc.in) -- (dot41)
+				(dot51) -- (myand11.in 2)
+				(dot52) -- (myand13.in 2)
+
+				% Y1
+				(dot61) -- +(0,-0.4\gvs)
+				(dot61) to[short, *-*] (dot62) to[short, -*] (dot63) -- (dot61 |- top)
+				(dot62) -- (myand15.in 1)
+				(dot63) -- (myandz.in 2)
+
+				% Y1'
+				(mynoty1.out) to[short, -*] (dot71) -- (mynoty1 |- top)
+				(mynoty1.in) -- (dot61)
+				(dot71) -- (myand11.in 1)
+
+				% Y2
+				(dot81) -- +(0,-0.2\gvs)
+				(dot81) to[short, *-*] (dot82) -- (dot81 |- top)
+				(dot82) -- (myand13.in 1)
+
+				% Y2'
+				(mynoty2.out) to[short, -*] (dot91) -- (mynoty2 |- top)
+				(mynoty2.in) -- (dot81)
+				(dot91) -- (myandz.in 1)
+				
+				% AND21
+				(myand11.out) -| (myand21.in 2)
+				(myand12.out) -| (myand21.in 1)
+
+				% AND22
+				(myand23.in 2) to[short, *-] (myand22.in 1)
+				(myand14.out) to[short, *-] (myand14.out |- myand23.in 1) to[short, *-] (myand14.out |- myand22.in 2) -- (myand22.in 2)
+
+				% AND23
+				(myand14.out |- myand23.in 1) -- (myand23.in 1)
+				(myand13.out) -| (myand23.in 2)
+
+				% AND24
+				(myand14.out) -| (myand24.in 2)
+				(myand15.out) -| (myand24.in 1)
+
+				% OR Y2
+				(myand21.out) -| (myory2.in 2)
+				(myand22.out) -| (myory2.in 1)
+				(myory2.out) |- ($(dot81)-(0,0.2\gvs)$)
+
+				% OR Y1
+				(myand23.out) -| (myory1.in 2)
+				(myand24.out) -| (myory1.in 1)
+				(myory1.out) -- +(0.2\gvs,0) |- ($(dot61)-(0,0.4\gvs)$)
+
+				% Z
+				(myandz.out) -- +(0.2\ghs,0)
+				(myandz.out) node[anchor=south west] {\Large $Z$}
+		
+				% Labels
+				($(bottoma)+(0,0.15\gvs)$) node[anchor=north east] {\Large $a$}
+				(dot21) node[anchor=north east] {\Large $b$}
+				(dot41) node[anchor=north east] {\Large $c$}
+				(dot61) node[anchor=north east] {\Large $y_1$}
+				(dot81) node[anchor=north east] {\Large $y_2$}
+				(myory1.out) node[anchor=south west] {\Large $Y_1$}
+				($(myory2.out)-(0.1\ghs,0)$) node[anchor=south west] {\Large $Y_2$}
+				;
+			\end{circuitikz}
+	}
+
+\end{Q}	
+
+
+
+% C'est beaucoup trop long, c'est complètement débile.
+% \begin{Q}
+% Construire la table de conditions d'équivalence pour la table de Huffman suivante~:
+% \begin{center}
+% 	\begin{tabular}{llllll}
+% 	\end{tabular}
+% \end{center}
+% \reponse{
+% }
+% \end{Q}
+
+
+
+
+
+\begin{Q}
+Dans la table des états de Huffman suivante~:
+\begin{center}
+	\begin{tabular}{|c|c|c|c|c|c|}\hline
+	& \multicolumn{4}{c|}{$ab$} & \\ \hline
+	  & 00 & 01 & 11 & 10 & Z \\ \hline
+	1 & 1 & 1 & 3 & - & 0 \\ \hline
+	2 & 2 & 2 & 3 & 4 & 1 \\ \hline
+	3 & 2 & 1 & 3 & 3 & 1 \\ \hline
+	4 & 1 & - & 4 & 4 & 0 \\ \hline
+	\end{tabular}
+\end{center}
+\begin{enumerate}
+	\item Trouver un codage n'offrant pas de problème de course.
+	Déterminer les fonctions de rétroactions $Y_1$ et $Y_2$.
+	\reponse{
+		1 $\rightarrow$ 00, 2 $\rightarrow$ 11, 3 $\rightarrow$ 10, 4 $\rightarrow$ 01.
+		\begin{center}
+			\begin{tabular}{|c|c|c|c|c|c|}\hline
+			$Y_1Y_2$ & \multicolumn{4}{c|}{$ab$} & \\ \hline
+			$y_1y_2$ & 00 & 01 & 11 & 10 & Z \\ \hline
+			00       & 00 & 00 & 10 & -  & 0 \\ \hline
+			11       & 11 & 11 & 10 & 01 & 1 \\ \hline
+			10       & 11 & 00 & 10 & 10 & 1 \\ \hline
+			01       & 00 & -  & 01 & 01 & 0 \\ \hline
+			\end{tabular}
+		\end{center}
+
+		Et en réarrangeant la table pour qu'on puisse directement en extraire les K-maps~:
+		\begin{center}
+			\begin{tabular}{|c|c|c|c|c|c|}\hline
+			$Y_1Y_2$ & \multicolumn{4}{c|}{$ab$} & \\ \hline
+			$y_1y_2$ & 00 & 01 & 11 & 10 & Z \\ \hline
+			00       & 00 & 00 & 10 & -  & 0 \\ \hline
+			01       & 00 & -  & 01 & 01 & 0 \\ \hline
+			11       & 11 & 11 & 10 & 01 & 1 \\ \hline
+			10       & 11 & 00 & 10 & 10 & 1 \\ \hline
+			\end{tabular}
+		\end{center}
+
+		Les K-maps et fonctions logiques correspondantes sont~:
+
+		\begin{center}
+			\askmapiv{$Y_1 = a\overline{y_1}y_2 + a\overline{b}y_2 + \overline{a}y_1y_2 + \overline{ab}y_1$}{a b $y_1$ $y_2$}{}{00110-01-1010100}{}
+		\end{center}
+
+		\begin{center}
+			\askmapiv{$Y_2 = a\overline{y_1y_2} + \overline{ab}y_1 + by_1y_2$}{a b $y_1$ $y_2$}{}{00110-01-0101011}{}
+		\end{center}
+
+		\begin{center}
+			\askmapiv{$Z = y_1$}{a b $y_1$ $y_2$}{}{00110--1-01--011}{}
+		\end{center}
+	}
+	\item Résoudre les problèmes de course critique si le codage est $1=00, 2=01, 3=11, 4=10$.
+	Donner les expressions des nouveaux $Y_1$ et $Y_2$.
+	\reponse{
+		Les cases en {\color{red}rouge} sont celle présentant des problèmes de course.
+
+		\begin{center}
+			\begin{tabular}{|c|c|c|c|c|c|}\hline
+			$Y_1Y_2$ & \multicolumn{4}{c|}{$ab$} & \\ \hline
+			$y_1y_2$ & 00 & 01 & 11 & 10 & Z \\ \hline
+			00       & 00 & 00 & {\color{red}11} & -  & 0 \\ \hline
+			01       & 01 & 01 & 11 & {\color{red}10} & 1 \\ \hline
+			11       & 01 & {\color{red}00} & 11 & 11 & 1 \\ \hline
+			10       & 00 & -  & 10 & 10 & 0 \\ \hline
+			\end{tabular}
+		\end{center}
+		
+		Les cases en {\color{green}vert} sont celles qui ont été modifiées pour résoudre les problèmes de course.
+		\begin{center}
+			\begin{tabular}{|c|c|c|c|c|c|}\hline
+			$Y_1Y_2$ & \multicolumn{4}{c|}{$ab$} & \\ \hline
+			$y_1y_2$ & 00 & 01 & 11 & 10 & Z \\ \hline
+			00       & 00 & 00 & {\color{green}01} & {\color{green}10} & 0 \\ \hline
+			01       & 01 & 01 & 11 & {\color{green}00} & 1 \\ \hline
+			11       & 01 & {\color{green}10} & 11 & 11 & 1 \\ \hline
+			10       & 00 & {\color{green}00} & 10 & 10 & 0 \\ \hline
+			\end{tabular}
+		\end{center}
+
+		Ce qui donne les fonctions logiques~:
+
+		\begin{center}
+			\askmapiv{$Y_1 = ay_1 + by_1y_2 + aby_2 + a\overline{by_2}$}{a b $y_1$ $y_2$}{}{0000000110110111}{}
+		\end{center}
+		
+		\begin{center}
+			\askmapiv{$Y_2 = \overline{ab}y_2 + b\overline{y_1}y_2 + ay_1y_2 + ab\overline{y_1}$}{a b $y_1$ $y_2$}{}{0101010000011101}{}
+		\end{center}
+
+		\begin{center}
+			\askmapiv{$Z = y_2$}{a b $y_1$ $y_2$}{}{0101010-0-01-101}{}
+		\end{center}
+
+	}
+\end{enumerate}
+\end{Q}
+
+
+
+
+
+
+\begin{Q}
+Réduire la table des états primitive suivante pour qu'elle ne contienne plus que quatre états.
+Coder les états de la table réduite en ajoutant les éventuels transitoires pour éviter les courses critiques.
+Calculer les fonctions de rétroaction $Y_1$ et $Y_2$.
+
+\begin{center}
+	\begin{tabular}{|c|c|c|c|c|c|}\hline
+	 & \multicolumn{4}{c|}{$ab$} & \\ \hline
+	 & 00 & 01 & 11 & 10 & Z \\ \hline
+	1 & 1 & 2 & 3 & 4 & 0 \\ \hline
+	2 & 1 & 2 & 3 & 5 & 1 \\ \hline
+	3 & 1 & 6 & 3 & 5 & 0 \\ \hline
+	4 & - & 2 & 7 & 4 & 0 \\ \hline
+	5 & 1 & 2 & 3 & 5 & 1 \\ \hline
+	6 & 1 & 6 & 3 & 5 & 0 \\ \hline
+	7 & 8 & 2 & 7 & - & 0 \\ \hline
+	8 & 8 & 2 & 7 & 4 & 0 \\ \hline
+	\end{tabular}
+\end{center}
+\reponse{
+\begin{center}
+			\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|} \hline%\cellcolor{green!25}
+				2 & x & \cellcolor{gray!20} & \cellcolor{gray!20} & \cellcolor{gray!20} & \cellcolor{gray!20} & \cellcolor{gray!20} & \cellcolor{gray!20} \\ \hline
+				\multirow{2}{*}{3} & \multirow{2}{*}{\cellcolor{red!25}} & \multirow{2}{*}{x} & \multirow{2}{*}{\cellcolor{gray!20}} & \multirow{2}{*}{\cellcolor{gray!20}} & \multirow{2}{*}{\cellcolor{gray!20}} & \multirow{2}{*}{\cellcolor{gray!20}} & \multirow{2}{*}{\cellcolor{gray!20}} \\
+				 & \cellcolor{red!25}2-6 & & \cellcolor{gray!20} & \cellcolor{gray!20} & \cellcolor{gray!20} & \cellcolor{gray!20} & \cellcolor{gray!20} \\ \hline
+				\multirow{3}{*}{4} & \multirow{3}{*}{\cellcolor{red!25}} & \multirow{3}{*}{x} & \cellcolor{red!25}2-6 & \multirow{3}{*}{\cellcolor{gray!20}} & \multirow{3}{*}{\cellcolor{gray!20}} & \multirow{3}{*}{\cellcolor{gray!20}} & \multirow{3}{*}{\cellcolor{gray!20}} \\
+				 & \cellcolor{red!25}3-7 & & \cellcolor{red!25}3-7 & \cellcolor{gray!20} & \cellcolor{gray!20} & \cellcolor{gray!20} & \cellcolor{gray!20} \\
+				 & \cellcolor{red!25} & & \cellcolor{red!25}4-5 & \cellcolor{gray!20} & \cellcolor{gray!20} & \cellcolor{gray!20} & \cellcolor{gray!20} \\ \hline
+				5 & x & \cellcolor{green!25}OK & x & x & \cellcolor{gray!20} & \cellcolor{gray!20} & \cellcolor{gray!20} \\ \hline
+				\multirow{3}{*}{6} & \cellcolor{red!25}2-6 & \multirow{3}{*}{x} & \cellcolor{green!25} & \cellcolor{red!25}2-6 & \multirow{3}{*}{x} & \cellcolor{gray!20} &\cellcolor{gray!20} \\
+				 & \cellcolor{red!25}4-5 &  & \cellcolor{green!25}OK & \cellcolor{red!25}3-7 &  & \cellcolor{gray!20} &  \cellcolor{gray!20}\\
+				 & \cellcolor{red!25} &  & \cellcolor{green!25} & \cellcolor{red!25}4-5 &  & \cellcolor{gray!20} &  \cellcolor{gray!20}\\ \hline
+				\multirow{3}{*}{7} & \cellcolor{red!25}1-8; & \multirow{3}{*}{x} & \cellcolor{red!25}1-8 & \cellcolor{green!25} & \multirow{3}{*}{x} & \cellcolor{red!25}1-8 & \cellcolor{gray!20} \\
+				 & \cellcolor{red!25}3-7 &  & \cellcolor{red!25}6-2 & \cellcolor{green!25}OK &  & \cellcolor{red!25}2-6 & \cellcolor{gray!20} \\
+				 & \cellcolor{red!25} & & \cellcolor{red!25} & \cellcolor{green!25} &  & \cellcolor{red!25}4-5 & \cellcolor{gray!20} \\ \hline
+				\multirow{4}{*}{8} & \cellcolor{red!25} & \multirow{4}{*}{x} & \cellcolor{red!25}1-8  & \cellcolor{green!25}  & \multirow{4}{*}{x}  & \cellcolor{red!25}1-8 & \multirow{4}{*}{x} \\
+				& \cellcolor{red!25}7-3 &  & \cellcolor{red!25}6-2 & \cellcolor{green!25}OK & & \cellcolor{red!25}2-6 & \\
+				& \cellcolor{red!25} &  & \cellcolor{red!25}3-7 & \cellcolor{green!25} & & \cellcolor{red!25}3-7 & \\
+				& \cellcolor{red!25} &  & \cellcolor{red!25}4-5 & \cellcolor{green!25} & & \cellcolor{red!25}4-5 & \\ \hline
+				% \multirow{2}{*}{9} & \multirow{2}{*}{x} & \multirow{2}{*}{x} & \cellcolor{red!25}6-8; & \multirow{2}{*}{x} & \cellcolor{green!25}7-11; & \multirow{2}{*}{x} & \multirow{2}{*}{x} & \multirow{2}{*}{x} & \cellcolor{gray!20} &  \cellcolor{gray!20}& \cellcolor{gray!20}\\
+				%  &  &  & \cellcolor{red!25}4-12 &  & \cellcolor{green!25} &  &  &  &  \cellcolor{gray!20}&  \cellcolor{gray!20}&\cellcolor{gray!20}\\ \hline
+				% \multirow{3}{*}{10} & \multirow{3}{*}{x} & \multirow{3}{*}{x} & \multirow{3}{*}{x} & \cellcolor{green!25}7-11; & \multirow{3}{*}{x} & \multirow{3}{*}{x} & \multirow{3}{*}{x} & \multirow{3}{*}{x} & \multirow{3}{*}{x} & \cellcolor{gray!20} & \cellcolor{gray!20}\\
+				%  &  &  &  & \cellcolor{green!25}5-9; &  &  &  &  &  & \cellcolor{gray!20} & \cellcolor{gray!20}\\
+				%  &  &  &  & \cellcolor{green!25}2-6; &  &  &  &  &  & \cellcolor{gray!20} & \cellcolor{gray!20}\\ \hline
+				% \multirow{2}{*}{11} & \cellcolor{red!25}2-8; & \multirow{2}{*}{x} & \multirow{2}{*}{x} & \multirow{2}{*}{x} & \multirow{2}{*}{x} & \multirow{2}{*}{x} & \cellcolor{green!25}5-9; & \multirow{2}{*}{x} & \multirow{2}{*}{x} & \multirow{2}{*}{x} & \cellcolor{gray!20}\\
+				%  & \cellcolor{red!25}3-9 &  &  &  &  &  & \cellcolor{green!25}4-10; &  &  &  & \cellcolor{gray!20}\\ \hline
+				% 12 & \multirow{4}{*}{x} & \cellcolor{red!25}5-9; & \multirow{4}{*}{x} & \multirow{4}{*}{x} & \multirow{4}{*}{x} & \cellcolor{red!25}11-7; & \multirow{4}{*}{x} & \cellcolor{red!25}1-7; & \multirow{4}{*}{x} & \multirow{4}{*}{x} & \multirow{4}{*}{x} \\
+				%  &  & \cellcolor{red!25}4-12 &  &  &  & \cellcolor{red!25}10-12; &  & \cellcolor{red!25}2-8; &  &  &  \\
+				%  &  & \cellcolor{red!25} &  &  &  & \cellcolor{red!25}2-6 &  & \cellcolor{red!25}3-5; &  &  &  \\
+				%  &  & \cellcolor{red!25} &  &  &  & \cellcolor{red!25} &  & \cellcolor{red!25}4-12 &  &  &  \\ \hline
+				 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \hline
+			\end{tabular}
+		\end{center}
+
+		On peut donc fusionner les états $5 \rightarrow 2$, $6 \rightarrow 3$, $7 \rightarrow 4$ et $8 \rightarrow 4$, ce qui nous donne bien quatre états.
+
+		La table de Huffman devient~:
+		\begin{center}
+			\begin{tabular}{|c|c|c|c|c|c|}\hline
+			 & \multicolumn{4}{c|}{$ab$} & \\ \hline
+			 & 00 & 01 & 11 & 10 & Z \\ \hline
+			1 & 1 & 2 & 3 & 4 & 0 \\ \hline
+			2 & 1 & 2 & 3 & 2 & 1 \\ \hline
+			3 & 1 & 3 & 3 & 2 & 0 \\ \hline
+			4 & 4 & 2 & 4 & 4 & 0 \\ \hline
+			\end{tabular}
+		\end{center}
+
+		En adoptant le codage $1 \rightarrow 00$, $2 \rightarrow 01$, $3 \rightarrow 11$ et $4 \rightarrow 10$, on obtient la table de Huffman codée~:
+		\begin{center}
+			\begin{tabular}{|c|c|c|c|c|c|}\hline
+			$Y_1Y_2$ & \multicolumn{4}{c|}{$ab$} & \\ \hline
+			$y_1y_2$ & 00 & 01 & 11 & 10 & Z \\ \hline
+			00 & 00 & 01 & {\color{red}11} & 10 & 0 \\ \hline
+			01 & 00 & 01 & 11 & 01 & 1 \\ \hline
+			11 & {\color{red}00} & 11 & 11 & 01 & 0 \\ \hline
+			10 & 10  & {\color{red}01} & 10 & 10 & 0 \\ \hline
+			\end{tabular}
+		\end{center}
+
+		Les cases mises en évidence en rouge présentent des problèmes de course critique.
+		Il est possible de régler ces problèmes avec les ajustements suivants~:
+		\begin{center}
+			\begin{tabular}{|c|c|c|c|c|c|}\hline
+			$Y_1Y_2$ & \multicolumn{4}{c|}{$ab$} & \\ \hline
+			$y_1y_2$ & 00 & 01 & 11 & 10 & Z \\ \hline
+			00 & 00 & 01 & {\color{green}01} & 10 & 0 \\ \hline
+			01 & 00 & 01 & 11 & 01 & 1 \\ \hline
+			11 & {\color{green}01} & 11 & 11 & 01 & 0 \\ \hline
+			10 & 10  & {\color{green}00} & 10 & 10 & 0 \\ \hline
+			\end{tabular}
+		\end{center}
+
+		De cette table, découlent les fonctions de rétroaction $Y_1$ et $Y_2$ ainsi que la fonction de sortie $Z$.
+
+		\begin{center}
+			\askmapiv{$Y_1 = \overline{b}y_1\overline{y_2} + a\overline{by_2} + by_1y_2 + aby_2 + aby_1$}{a b $y_1$ $y_2$}{}{0010000110100111}{}
+		\end{center}
+
+		\begin{center}
+			\askmapiv{$Y_2 = y_1y_2 + b\overline{y_1} + ay_2$}{a b $y_1$ $y_2$}{}{0001110101011101}{}
+		\end{center}
+
+		\begin{center}
+			\askmapiv{$Z = y_2$}{a b $y_1$ $y_2$}{}{0000-100010-0000}{}
+		\end{center}
+
+		Attention, les cases $y_1y_2ab = 1100$ et $0100$ devraient être un « $-$ » d'après la table de Huffman.
+		Cependant, ces deux cases sont des états instables et lors de la transition $11(01) \rightarrow 01(00) \rightarrow 00(00)$\footnote{En utilisant la notation « état présent(état futur) ».}, la sortie doit rester à $0$.
+
+		Il en va de même pour les cases $0011$ et $0111$.
+
+
+}
+\end{Q}
+
+
+\end{document}
