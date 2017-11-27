@@ -1,0 +1,234 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsthm} %numéroter les questions
+\usepackage[frenchb]{babel}
+\usepackage{datetime}
+\usepackage{xspace} % typographie IN
+\usepackage[hidelinks]{hyperref}% hyperliens
+\usepackage[all]{hypcap} %lien pointe en haut des figures
+\usepackage[french]{varioref} %voir x p y
+\usepackage{fancyhdr}% en têtes
+%\input cyracc.def
+\usepackage{graphicx} %include pictures
+\usepackage{pgfplots}
+
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows,automata}
+\usetikzlibrary{babel}
+\usepackage{circuitikz}
+% \usepackage{gnuplottex}
+\usepackage{float}
+\usepackage{ifthen}
+
+\usepackage[top=1.3 in, bottom=1.3 in, left=1.3 in, right=1.3 in]{geometry} % Yeah, that's bad to play with margins
+\usepackage[]{pdfpages}
+\usepackage[]{attachfile}
+
+\usepackage{amsmath}
+\usepackage{amssymb} % checkmark
+\usepackage{enumitem}
+\setlist[enumerate]{label=\alph*)}% If you want only the x-th level to use this format, use '[enumerate,x]'
+\usepackage[]{xcolor}
+\usepackage{colortbl}
+\usepackage{multirow}
+\usepackage{bigdelim}%Braces in tabular
+
+\usepackage{askmaps} % https://github.com/parastuffs/askmaps_custom
+
+\newcommand\encircle[1]{%http://tex.stackexchange.com/questions/123924/indexed-letters-inside-circles
+  \tikz[baseline=(X.base)] 
+    \node (X) [draw, shape=circle, inner sep=0] {\strut #1};}
+
+
+\newcommand\version{v1.0.0}
+
+%cyr
+\newcommand\textcyr[1]{{\fontencoding{OT2}\fontfamily{wncyr}\selectfont #1}}
+
+%Numero du TP :
+\def \tpnumber {TP 10 }
+
+\newboolean{corrige}
+\ifx\correction\undefined
+\setboolean{corrige}{false}% pas de corrigé
+\else
+\setboolean{corrige}{true}%corrigé
+\fi
+
+%\setboolean{corrige}{false}% pas de corrigé
+
+\newboolean{annexes}
+\setboolean{annexes}{true}%annexes
+%\setboolean{annexes}{false}% pas de annexes
+
+\definecolor{darkblue}{rgb}{0,0,0.5}
+
+\newboolean{mos}
+%\setboolean{mos}{true}%annexes
+\setboolean{mos}{false}% pas de annexes
+
+\usepackage{aeguill} %guillemets
+
+%% fancy header & foot
+\pagestyle{fancy}
+\lhead{[ELEC-H-305] Circuits logiques et numériques\\ \tpnumber}
+\rhead{\version\\ page \thepage}
+\chead{\ifthenelse{\boolean{corrige}}{Corrigé}{}}
+\cfoot{}
+%%
+
+\pdfinfo{
+/Author (Quentin Delhaye, ULB -- BEAMS)
+/Title (\tpnumber, ELEC-H-305)
+/ModDate (D:\pdfdate)
+}
+
+\hypersetup{
+pdftitle={\tpnumber [ELEC-H-305] Choucroute logique et numérique},
+pdfauthor={Quentin Delhaye, ULB -- BEAMS  },
+pdfsubject={}
+}
+
+\theoremstyle{definition}% questions pas en italique
+\newtheorem{Q}{Question}[] % numéroter les questions [section] ou non []
+
+\newcommand{\reponse}[1]{% pour intégrer une réponse : \reponse{texte} : sera inclus si \boolean{corrige}
+	\ifthenelse {\boolean{corrige}} {\paragraph{Réponse :} \color{darkblue}   #1\color{black}} {}
+ }
+
+\newcommand{\addcontentslinenono}[4]{\addtocontents{#1}{\protect\contentsline{#2}{#3}{#4}{}}}
+
+\date{}
+\title{\vspace{-2cm}Circuits logiques et numériques [ELEC-H-305] \\  \tpnumber Synthèse de circuits \ifthenelse{\boolean{corrige}}{-- Corrigé}{} \\ \small{\version}}
+
+\setlength{\parskip}{0.2cm plus2mm minus1mm} %espacement entre §
+\setlength{\parindent}{0pt}
+
+\newlength{\gvs}% Gate Vertical Space
+\gvs=6em
+\newlength{\ghs}% Gate Horizontal Space
+\ghs=10em
+
+\begin{document}
+% \pagestyle{empty}
+\maketitle
+\vspace*{-1cm}
+
+
+\begin{Q}
+Coder la table de Huffman suivant afin d'éviter les problèmes de course critique en ajoutant si nécessaire un nouvel état.
+Calculer les fonctions internes $Z_1$ et $Z_2$.
+
+\begin{center}
+	\begin{tabular}{|c|c|c|c|c|c|c|}\hline
+	& \multicolumn{4}{c|}{$ab$} & \multicolumn{2}{c|}{} \\ \hline
+	  & 00 & 01 & 11 & 10 & $Z_1$ & $Z_2$ \\ \hline
+	1 & \textbf{1} & \textbf{1} & 2 & 3 & 0 & 0 \\ \hline
+	2 & \textbf{2} & 1 & \textbf{2} & \textbf{2} & 0 & 1 \\ \hline
+	3 & 2 & 1 & 4 & \textbf{3} & 1 & 0 \\ \hline
+	4 & 1 & \textbf{4} & \textbf{4} & \textbf{4} & 1 & 1 \\ \hline
+	\end{tabular}
+\end{center}
+
+\reponse{
+	En utilisant le codage $1 \rightarrow 00$, $2 \rightarrow 01$, $3 \rightarrow 11$ et $4 \rightarrow 10$.
+	On obtient une table de Huffman avec des problèmes de course~:
+	
+	\begin{center}
+		\begin{tabular}{|c|c|c|c|c|c|c|}\hline
+		$Y_1Y_2$ & \multicolumn{4}{c|}{$ab$} & \multicolumn{2}{c|}{} \\ \hline
+		$y_1y_2$ & 00 & 01 & 11 & 10 & $Z_1$ & $Z_2$ \\ \hline
+		00 & \textbf{00} & \textbf{00} & 01 & {\color{red}11} & 0 & 0 \\ \hline
+		01 & \textbf{01} & 00 & \textbf{01} & \textbf{01} & 0 & 1 \\ \hline
+		11 & 01 & {\color{red}00} & 10 & \textbf{11} & 1 & 0 \\ \hline
+		10 & 00 & \textbf{10} & \textbf{10} & \textbf{10} & 1 & 1 \\ \hline
+		\end{tabular}
+	\end{center}
+
+	Un seul problème de course peut être résolu, mais un subsiste~:
+	
+	\begin{center}
+		\begin{tabular}{|c|c|c|c|c|c|c|}\hline
+		$Y_1Y_2$ & \multicolumn{4}{c|}{$ab$} & \multicolumn{2}{c|}{} \\ \hline
+		$y_1y_2$ & 00 & 01 & 11 & 10 & $Z_1$ & $Z_2$ \\ \hline
+		00 & \textbf{00} & \textbf{00} & 01 & {\color{red}11} & 0 & 0 \\ \hline
+		01 & \textbf{01} & 00 & \textbf{01} & \textbf{01} & 0 & 1 \\ \hline
+		11 & 01 & {\color{green}01} & 10 & \textbf{11} & 1 & 0 \\ \hline
+		10 & 00 & \textbf{10} & \textbf{10} & \textbf{10} & 1 & 1 \\ \hline
+		\end{tabular}
+	\end{center}
+
+	Pour résoudre le problème restant, il faut ajoutant une troisième variable d'état qui permettra d'ajouter des transitions avec des distances de Hamming de 1.
+
+	\begin{center}
+		\begin{tabular}{|c|c|c|c|c|c|c|}\hline
+		$Y_1Y_2Y_3$ & \multicolumn{4}{c|}{$ab$} & \multicolumn{2}{c|}{} \\ \hline
+		$y_1y_2y_3$ & 00 & 01 & 11 & 10 & $Z_1$ & $Z_2$ \\ \hline
+		000 & \textbf{000} & \textbf{000} & 001 & {\color{green}100} & 0 & 0 \\ \hline
+		001 & \textbf{001} & 000 & \textbf{001} & \textbf{001} & 0 & 1 \\ \hline
+		011 & 001 & 001 & 010 & \textbf{011} & 1 & 0 \\ \hline
+		010 & 000 & \textbf{010} & \textbf{010} & \textbf{010} & 1 & 1 \\ \hline
+		100 & - & - & - & 101 & 0 & 0 \\ \hline
+		101 & - & - & - & 111 & 0 & 0 \\ \hline
+		111 & - & - & - & 011 & 0 & 0 \\ \hline
+		110 & - & - & - & - & - & - \\ \hline
+		\end{tabular}
+	\end{center}
+
+	On en déduit les K-maps suivantes~:
+	\begin{center}
+			\askmapv{$Y_1 = b\overline{y_1y_2y_3} + a\overline{y_2}$}{a b $y_1$ $y_2$ $y_3$}{}{0000000010000000--------11-0----}{}
+	\end{center}
+
+	\begin{center}
+			\askmapv{$Y_2 = ay_3 + by_2 + y_1y_2\overline{y_3}$}{a b $y_1$ $y_2$ $y_3$}{}{0000001000110011--------01-1----}{}
+	\end{center}
+
+	\begin{center}
+			\askmapv{$Y_3 = \overline{y_1}y_3 + \overline{b}y_2y_3 + by_1\overline{y_2} + a\overline{y_2}$}{a b $y_1$ $y_2$ $y_3$}{}{0101000101011100--------11-1----}{}
+	\end{center}
+
+	\begin{center}
+			\askmapv{$Z_1 = \overline{a}y_2$}{a b $y_1$ $y_2$ $y_3$}{}{00--001-00110011--------00-0----}{}
+	\end{center}
+
+	\begin{center}
+			\askmapv{$Z_2 = \overline{by_1}y_3 + b\overline{y_2}y_3 + y_2\overline{y_3}$}{a b $y_1$ $y_2$ $y_3$}{}{01--00100110-11---------00-0----}{}
+	\end{center}
+
+}
+\end{Q}
+
+
+\begin{Q}
+Une machine de Mealy est représentée dans la table de Huffman suivante.
+Quelle est l'expression logique de $Z$ ?
+
+\begin{center}
+	\begin{tabular}{|c|c|c|c|c|}\hline
+	$Y_1Y_2/Z$ & \multicolumn{4}{c|}{$ab$} \\ \hline
+	$y_1y_2$ & 00 & 01 & 11 & 10 \\ \hline
+	00 & \textbf{00/1} & 01 & \textbf{00/1} & - \\ \hline
+	01 & - & 11 & \textbf{01/1} & \textbf{01/0} \\ \hline
+	11 & \textbf{11/0} & \textbf{11/0} & 01 & 01 \\ \hline
+	10 & 00 & 11 & \textbf{10/1} & \textbf{10/1} \\ \hline
+	\end{tabular}
+\end{center}
+
+\reponse{
+	\begin{center}
+			\askmapiv{$Y_1 = ay_1\overline{y_2} + bya_1\overline{y_2} + \overline{a}y_2$}{a b $y_1$ $y_2$}{}{0-010111-0100010}{}
+	\end{center}
+
+	\begin{center}
+			\askmapiv{$Y_2 = y_2 + \overline{a}b$}{a b $y_1$ $y_2$}{}{0-011111-1010101}{}
+	\end{center}
+
+	\begin{center}
+			\askmapiv{$Z = \overline{y_2}$}{a b $y_1$ $y_2$}{}{1-101--0-010111-}{}
+	\end{center}
+}
+\end{Q}
+
+\end{document}
