@@ -41,7 +41,7 @@
     \node (X) [draw, shape=circle, inner sep=0] {\strut #1};}
 
 
-\newcommand\version{v1.0.0}
+\newcommand\version{v1.1.0}
 
 %cyr
 \newcommand\textcyr[1]{{\fontencoding{OT2}\fontfamily{wncyr}\selectfont #1}}
@@ -404,7 +404,18 @@ Dans la table des états de Huffman suivante~:
 	\item Trouver un codage n'offrant pas de problème de course.
 	Déterminer les fonctions de rétroactions $Y_1$ et $Y_2$.
 	\reponse{
+
+		Un problème de course survient lorsque la machine doit passer dans un nouvel état dans lequel plus d'une fonction de rétroaction change.
+		Par exemple, lorsque l'on passe de l'état $00$ à l'état $11$, $y_1$ et $y_2$ changent de valeur.
+		Or, il se peut que l'un des deux signaux soit plus lent que l'autre, entraînant une transition vers un état non désiré.
+
+		Pour éviter ces problèmes, il suffit parfois de choisir un codage des états approprié.
+		Dans notre cas, si l'on choisit de coder l'état $1$ par $00$, il faut obligatoirement coder l'état $3$ par un codage ayant une distance de Hamming de 1 à cause de la transition $1 \rightarrow 3$.
+		Choisissons de coder $3$ par $01$.
+
+		En suivant la même réflexion pour les deux autres états, on peut trouver le codage suivant~:
 		1 $\rightarrow$ 00, 2 $\rightarrow$ 11, 3 $\rightarrow$ 10, 4 $\rightarrow$ 01.
+
 		\begin{center}
 			\begin{tabular}{|c|c|c|c|c|c|}\hline
 			$Y_1Y_2$ & \multicolumn{4}{c|}{$ab$} & \\ \hline
@@ -457,8 +468,69 @@ Dans la table des états de Huffman suivante~:
 			10       & 00 & -  & 10 & 10 & 0 \\ \hline
 			\end{tabular}
 		\end{center}
-		
-		Les cases en {\color{green}vert} sont celles qui ont été modifiées pour résoudre les problèmes de course.
+
+
+		Nous avons maintenant plusieurs problèmes de course, par exemple lorsque l'on se trouve dans l'état $00$ avec les entrées $01$ et que ces dernières passent à $11$, la machine nous envoie à l'état $11$, faisant donc changer les deux variables de rétroaction simultanément.
+
+		Nous pouvons répertorier tous les problèmes de course~:
+		\begin{enumerate}
+			\item Transition de l'état $00$ à l'état $11$ lorsque les entrées passent de $01$ à $11$.
+			\item Transition de l'état $01$ à l'état $10$ lorsque les entrées passent de $00$ à $10$.
+			\item Transition de l'état $11$ à l'état $00$ lorsque les entrées passent de $11$ à $01$.
+		\end{enumerate}
+
+		Puisque le codage est imposé, nous allons utiliser les \textit{don't care} et les états instables pour régler ces problèmes en effectuant des transitions intermédiaires.
+		En illustrant avec des tables de Huffman partielles~:
+		\begin{enumerate}
+			\item 
+			% \begin{center}
+				\begin{tabular}{|c|c|c|}\hline
+				$Y_1Y_2$ & 01 & 11 \\ \hline
+				00 & \textbf{00} & 11 \\ \hline
+				01 & \textbf{01} & 11 \\ \hline
+				11 & 00 & \textbf{11} \\ \hline
+				\end{tabular}
+				devient
+				\begin{tabular}{|c|c|c|}\hline
+				$Y_1Y_2$ & 01 & 11 \\ \hline
+				00 & \textbf{00} & \color{green}{01} \\ \hline
+				01 & \textbf{01} & 11 \\ \hline
+				11 & 00 & \textbf{11} \\ \hline
+				\end{tabular}
+			% \end{center}
+
+			\item
+			\begin{tabular}{|c|c|c|}\hline
+				$Y_1Y_2$ & 00 & 10 \\ \hline
+				00 & \textbf{00} & - \\ \hline
+				01 & \textbf{01} & 10 \\ \hline
+				10 & 00 & \textbf{10} \\ \hline
+			\end{tabular}
+			devient
+			\begin{tabular}{|c|c|c|}\hline
+				$Y_1Y_2$ & 00 & 10 \\ \hline
+				00 & \textbf{00} & \color{green}{10} \\ \hline
+				01 & \textbf{01} & \color{green}{00} \\ \hline
+				10 & 00 & \textbf{10} \\ \hline
+			\end{tabular}
+
+			\item
+			\begin{tabular}{|c|c|c|}\hline
+				$Y_1Y_2$ & 01 & 11 \\ \hline
+				00 & \textbf{00} & 01 \\ \hline
+				11 & 00 & \textbf{11} \\ \hline
+				10 & - & \textbf{10} \\ \hline
+			\end{tabular}
+			devient
+			\begin{tabular}{|c|c|c|}\hline
+				$Y_1Y_2$ & 01 & 11 \\ \hline
+				00 & \textbf{00} & 01 \\ \hline
+				11 & \color{green}{10} & \textbf{11} \\ \hline
+				10 & \color{green}{00} & \textbf{10} \\ \hline
+			\end{tabular}
+		\end{enumerate}
+
+		On obtient donc une nouvelle table de Huffman sans condition de course~:
 		\begin{center}
 			\begin{tabular}{|c|c|c|c|c|c|}\hline
 			$Y_1Y_2$ & \multicolumn{4}{c|}{$ab$} & \\ \hline
