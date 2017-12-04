@@ -41,7 +41,7 @@
     \node (X) [draw, shape=circle, inner sep=0] {\strut #1};}
 
 
-\newcommand\version{v1.1.0}
+\newcommand\version{v1.2.0}
 
 %cyr
 \newcommand\textcyr[1]{{\fontencoding{OT2}\fontfamily{wncyr}\selectfont #1}}
@@ -216,7 +216,7 @@ Dresser la table de Huffman de ce problème.
 			00 & \textbf{00} & \textbf{00} & \textbf{00} & \textbf{00} & 01 & \textbf{00} & \textbf{00} & \textbf{00} & 0 \\ \hline
 			01 & 00 & 00 & 00 & 00 & \textbf{01} & 00 & 00 & 11 & 0 \\ \hline
 			11 & 00 & 00 & 00 & 00 & 00 & 00 & 10 & \textbf{11} & 0 \\ \hline
-			01 & 00 & 00 & 00 & 00 & 00 & 00 & \textbf{10} & 00 & 1 \\ \hline
+			10 & 00 & 00 & 00 & 00 & 00 & 00 & \textbf{10} & 00 & 1 \\ \hline
 			\end{tabular}
 		\end{center}
 
@@ -669,7 +669,7 @@ Calculer les fonctions de rétroaction $Y_1$ et $Y_2$.
 		\end{center}
 
 		\begin{center}
-			\askmapiv{$Z = y_2$}{a b $y_1$ $y_2$}{}{0000-100010-0000}{}
+			\askmapiv{$Z = \overline{a}b\overline{y_1} + a\overline{b}y_2$}{a b $y_1$ $y_2$}{}{0000-100010-0000}{}
 		\end{center}
 
 		Attention, les cases $y_1y_2ab = 1100$ et $0100$ devraient être un « $-$ » d'après la table de Huffman.
