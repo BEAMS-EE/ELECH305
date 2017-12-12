@@ -43,7 +43,7 @@
     \node (X) [draw, shape=circle, inner sep=0] {\strut #1};}
 
 
-\newcommand\version{v1.1.0}
+\newcommand\version{v1.2.0}
 
 %cyr
 \newcommand\textcyr[1]{{\fontencoding{OT2}\fontfamily{wncyr}\selectfont #1}}
@@ -180,23 +180,23 @@ Calculer les fonctions internes $Z_1$ et $Z_2$.
 
 	On en déduit les K-maps suivantes~:
 	\begin{center}
-			\askmapv{$Y_1 = b\overline{y_1y_2y_3} + a\overline{y_2}$}{a b $y_1$ $y_2$ $y_3$}{}{0000000010000000--------11-0----}{}
+			\askmapv{$Y_1 = b\overline{ay_2y_3} + y_1\overline{y_2}$}{$y_1$ a b $y_2$ $y_3$}{}{0000000010000000--------11-0----}{}
 	\end{center}
 
 	\begin{center}
-			\askmapv{$Y_2 = ay_3 + by_2 + y_1y_2\overline{y_3}$}{a b $y_1$ $y_2$ $y_3$}{}{0000001000110011--------01-1----}{}
+			\askmapv{$Y_2 = y_1y_3 + by_2 + ay_2\overline{y_3}$}{$y_1$ a b $y_2$ $y_3$}{}{0000001000110011--------01-1----}{}
 	\end{center}
 
 	\begin{center}
-			\askmapv{$Y_3 = \overline{y_1}y_3 + \overline{b}y_2y_3 + by_1\overline{y_2} + a\overline{y_2}$}{a b $y_1$ $y_2$ $y_3$}{}{0101000101011100--------11-1----}{}
+			\askmapv{$Y_3 = \overline{a}y_3 + \overline{b}y_2y_3 + ba\overline{y_2} + y_1\overline{y_2}$}{$y_1$ a b $y_2$ $y_3$}{}{0101000101011100--------11-1----}{}
 	\end{center}
 
 	\begin{center}
-			\askmapv{$Z_1 = \overline{a}y_2$}{a b $y_1$ $y_2$ $y_3$}{}{00--001-00110011--------00-0----}{}
+			\askmapv{$Z_1 = \overline{y_1}y_2$}{a b $y_1$ $y_2$ $y_3$}{}{00--001-00110011--------00-0----}{}
 	\end{center}
 
 	\begin{center}
-			\askmapv{$Z_2 = \overline{by_1}y_3 + b\overline{y_2}y_3 + y_2\overline{y_3}$}{a b $y_1$ $y_2$ $y_3$}{}{01--00100110-11---------00-0----}{}
+			\askmapv{$Z_2 = \overline{ba}y_3 + b\overline{y_2}y_3 + y_2\overline{y_3}$}{$y_1$ a b $y_2$ $y_3$}{}{01--00100110-11---------00-0----}{}
 	\end{center}
 
 }
