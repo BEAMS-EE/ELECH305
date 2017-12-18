@@ -1,0 +1,916 @@
+\documentclass[11pt,a4paper,dvipsnames]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsthm} %numéroter les questions
+\usepackage[frenchb]{babel}
+\usepackage{datetime}
+\usepackage{xspace} % typographie IN
+\usepackage{hyperref}% hyperliens
+\usepackage[all]{hypcap} %lien pointe en haut des figures
+\usepackage[french]{varioref} %voir x p y
+\usepackage{fancyhdr}% en têtes
+%\input cyracc.def
+\usepackage{graphicx} %include pictures
+\usepackage{pgfplots}
+
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows,automata}
+\usetikzlibrary{babel}
+\usepackage{circuitikz}
+% \usepackage{gnuplottex}
+\usepackage{float}
+\usepackage{ifthen}
+\usepackage{pstricks}
+\usepackage{minted}
+\setminted[c]{%
+fontsize=\footnotesize,
+tabsize=4}
+\setminted[python]{%
+fontsize=\footnotesize,
+tabsize=4}
+\setminted[java]{%
+fontsize=\footnotesize,
+tabsize=4}
+
+\usepackage{accsupp} %To avoid copying line numbers in listings.
+
+\newcommand{\noncopynumber}[1]{%http://tex.stackexchange.com/questions/122256/only-select-code-without-line-numbers
+	\BeginAccSupp{method=escape,ActualText={}}
+	#1
+	\EndAccSupp{}
+}
+
+\usepackage{xcolor}
+\definecolor{colKeys}{rgb}{0,0,1}  % couleurs des mots-clés propres au language
+\definecolor{colIdentifier}{RGB}{100,100,100}  % couleurs des mots à identifier
+\definecolor{colComments}{rgb}{0,0.6,0}  % couleurs des commentaires
+\definecolor{colString}{rgb}{0.6,0.1,0.1}
+\usepackage{listings}
+\lstnewenvironment{uC}{%
+  \lstset{language=c,%
+	commentstyle=\color{colComments}\textit,
+	float=hbp,%
+	basicstyle=\ttfamily\footnotesize, %
+	identifierstyle=\color{colIdentifier}, %
+	keywordstyle=\color{colKeys}, %
+	stringstyle=\color{colString}, %
+	columns=flexible, %
+	tabsize=2, %
+	extendedchars=true, %
+	showspaces=false, %
+	showstringspaces=false, %
+	numbers=left, %
+	numberstyle=\tiny, %
+	breaklines=true, %
+	breakautoindent=true, %
+	captionpos=b,
+	frame=lines,
+	numberstyle=\tiny\noncopynumber}
+}{}
+\usepackage{multirow}
+
+\usepackage[top=1.3 in, bottom=1.3 in, left=1.3 in, right=1.3 in]{geometry} % Yeah, that's bad to play with margins
+\usepackage[]{pdfpages}
+\usepackage[]{attachfile}
+
+\usepackage{amsmath}
+\usepackage{enumitem}
+\setlist[enumerate]{label=\alph*)}% If you want only the x-th level to use this format, use '[enumerate,x]'
+
+\newdateformat{mydate}{2016--2017}%hack pour remplacer \THEYEAR
+
+%cyr
+\newcommand\textcyr[1]{{\fontencoding{OT2}\fontfamily{wncyr}\selectfont #1}}
+
+%Numero du TP :
+\def \tpnumber {Labo C}
+
+%corrigé ou non ?
+\newboolean{corrige}
+\ifx\correction\undefined
+\setboolean{corrige}{false}% pas de corrigé
+\else
+\setboolean{corrige}{true}%corrigé
+\fi
+%\setboolean{corrige}{true}
+%\setboolean{corrige}{false}% pas de corrigé
+
+\newboolean{annexes}
+\setboolean{annexes}{true}%annexes
+%\setboolean{annexes}{false}% pas de annexes
+
+\definecolor{darkblue}{rgb}{0,0,0.5}
+
+\newboolean{mos}
+%\setboolean{mos}{true}%annexes
+\setboolean{mos}{false}% pas de annexes
+
+\usepackage{aeguill} %guillemets
+
+%% fancy header & foot
+\pagestyle{fancy}
+\lhead{[ELEC-H-305] Circuits logiques et numériques\\ \tpnumber }
+\rhead{v1.0.0\\ page \thepage}
+\chead{\ifthenelse{\boolean{corrige}}{Corrigé}{}}
+\cfoot{}
+%%
+
+\pdfinfo{
+/Author (ULB -- BEAMS)
+/Title (\tpnumber, ELEC-H-305)
+/ModDate (D:\pdfdate)
+}
+
+\hypersetup{
+pdftitle={\tpnumber [ELEC-H-305] Circuits logiques et numériques},
+pdfauthor={ULB -- BEAMS  },
+pdfsubject={}
+}
+
+\theoremstyle{definition}% questions pas en italique
+\newtheorem{Q}{Question}[] % numéroter les questions [section] ou non []
+
+\newcommand{\reponse}[1]{% pour intégrer une réponse : \reponse{texte} : sera inclus si \boolean{corrige}
+	\ifthenelse {\boolean{corrige}} {\paragraph{Réponse :}
+    \color{darkblue} #1 \color{black}} {}
+ }
+\newcounter{reponseCnt}
+
+\newcommand{\addcontentslinenono}[4]{\addtocontents{#1}{\protect\contentsline{#2}{#3}{#4}{}}}
+
+\date{\vspace{-1.7cm}\mydate\today}
+\title{\vspace{-2cm} \tpnumber \\ Circuits logiques et numériques [ELEC-H-305] \ifthenelse{\boolean{corrige}}{~\\Corrigé}{}}
+
+\setlength{\parskip}{0.2cm plus2mm minus1mm} %espacement entre §
+\setlength{\parindent}{0pt}
+
+
+\reversemarginpar %Margin note in the left margin.
+
+\begin{document}
+\ifthenelse {\boolean{corrige}} {\setcounter{reponseCnt}{1}} {\setcounter{reponseCnt}{0}}
+% \pagestyle{empty}
+\maketitle
+\vspace*{-1cm}
+
+
+
+% ##     ##  #########  ##         ##           #####    
+% ##     ##  ##         ##         ##         ##     ##  
+% ##     ##  ##         ##         ##         ##     ##  
+% #########  ######     ##         ##         ##     ##  
+% ##     ##  ##         ##         ##         ##     ##  
+% ##     ##  ##         ##         ##         ##     ##  
+% ##     ##  #########  #########  #########    #####    
+
+\begin{Q} \textbf{Hello world}
+
+Ce premier extrait de code présente le squelette de base d'un programme en C.
+Pour le compiler, vous pouvez utiliser Codeblocks ou un compilateur comme \texttt{gcc} en ligne de commande : \texttt{gcc -Wall hello.c}.
+
+\inputminted[%
+fontsize=\footnotesize,
+tabsize=4,
+]{c}{hello.c}
+\end{Q}
+
+
+
+
+
+
+
+
+
+
+% ##########  ##    ##   ########   #########  
+%     ##       ##  ##    ##     ##  ##         
+%     ##        ####     ##     ##  ##         
+%     ##         ##      #######    ######     
+%     ##         ##      ##         ##         
+%     ##         ##      ##         ##         
+%     ##         ##      ##         #########  
+
+\begin{Q} \textbf{Type}
+
+Complétez le tableau suivant avec les valeurs maximales et minimales de chacun de ces types.
+\begin{center}
+	\begin{tabular}{|l|p{5cm}|p{5cm}|} \hline
+	Type & Minimum & Maximum \\ \hline
+	int & & \\ \hline
+	unsigned int & & \\ \hline
+	short & & \\ \hline
+	unsigned short & & \\ \hline
+	long & & \\ \hline
+	unsigned long & & \\ \hline
+	float & & \\ \hline
+	double & & \\ \hline
+	char & & \\ \hline
+	unsigned char & & \\ \hline
+	\end{tabular}
+\end{center}
+\end{Q}
+
+
+
+
+
+
+
+
+
+%   #####    ##     ##  #########  ########   #########  ##           #####    ##           ##  
+% ##     ##  ##     ##  ##         ##     ##  ##         ##         ##     ##  ##           ##  
+% ##     ##  ##     ##  ##         ##     ##  ##         ##         ##     ##  ##           ##  
+% ##     ##  ##     ##  ######     ########   ######     ##         ##     ##  ##           ##  
+% ##     ##   ##   ##   ##         ##   ##    ##         ##         ##     ##   ##   ###   ##   
+% ##     ##    ## ##    ##         ##    ##   ##         ##         ##     ##    ## ## ## ##    
+%   #####       ###     #########  ##     ##  ##         #########    #####       ###   ###    
+\begin{Q} \textbf{Overflow}
+
+Dans le code suivant, quelle sera la sortie ?
+
+\inputminted[%
+fontsize=\footnotesize,
+tabsize=4,
+]{c}{type-overflow.c}
+\end{Q}
+
+
+
+
+
+
+
+
+
+
+\begin{Q} \textbf{C't'un bon type.}
+
+Choisissez le bon ordre des opérations afin de maximiser la précision du résultat final.
+Vous ne pouvez utiliser que des \texttt{short}.
+
+\begin{minted}{c}
+short a = 50;
+short b = 100;
+short c = 600;
+short d = 350;
+
+short res1 = a * b / c;
+short res2 = a / d * b;
+short res3 = b * c / d;
+\end{minted}
+\end{Q}
+
+
+
+
+
+
+
+
+
+
+
+
+%  #######      ###      #######   ##########  
+% ##     ##    ## ##    ##     ##      ##      
+% ##          ##   ##   ##             ##      
+% ##         ##     ##   #######       ##      
+% ##         #########         ##      ##      
+% ##     ##  ##     ##  ##     ##      ##      
+%  #######   ##     ##   #######       ##      
+\begin{Q} \textbf{Casting}
+
+Une variable peut passer d'un type à un autre en utilisant le «~casting~».
+Par exemple, pour transformer un \texttt{int} en \texttt{long}, on écrira
+\begin{minted}{c}
+int a;
+long b = (double)a;
+\end{minted}
+
+Castez correctement le code suivant pour obtenir les bons résultats aux différentes opérations.
+
+\inputminted[%
+fontsize=\footnotesize,
+tabsize=4,
+]{c}{cast.c}
+\end{Q}
+
+
+
+
+
+
+
+
+
+
+
+
+%  #######   ##########  ########   ##     ##   #######   ##########  
+% ##     ##      ##      ##     ##  ##     ##  ##     ##      ##      
+% ##             ##      ##     ##  ##     ##  ##             ##      
+%  #######       ##      ########   ##     ##  ##             ##      
+%        ##      ##      ##   ##    ##     ##  ##             ##      
+% ##     ##      ##      ##    ##   ##     ##  ##     ##      ##      
+%  #######       ##      ##     ##   #######    #######       ##      
+\begin{Q} \textbf{Structures}
+
+Losque l'on veut déclarer un groupe de variables qui forment un ensemble cohérent, il est judicieux d'utiliser une structure adéquate.
+Dans le paradigme orienté objet, on créerait par exemple une classe dont on peut instancier des objets.
+
+Le C n'étant pas orenté objet, il faut se tourner vers une autre solution : les «~structures~».
+
+\begin{minted}{c}
+struct MyStruct {
+	int a;
+	int b;
+};
+\end{minted}
+
+On peut ensuite instancier cette structure~:
+
+\begin{minted}{c}
+struct MyStruct foo;
+\end{minted}
+
+On a maintenant une variable \texttt{foo} contenant deux variables \texttt{a} et \texttt{b} de type \texttt{int}.
+Afin d'éviter de devoir écrire \texttt{struct} à chaque fois que l'on veut créer cette structure, on peut aussi créer une variable portant le même nom que notre structure.
+
+\begin{minted}{c}
+typedef struct MyStruct Mystruct;
+\end{minted}
+
+\texttt{typedef} fonctionne ainsi : je déclare une type (\texttt{typedef}) portant le nom «~\texttt{MyStruct}~» et étant en réalité un «~\texttt{struct Mystruct}~».
+On peut à présent redéclarer \texttt{foo}~:
+
+\begin{minted}{c}
+MyStruct foo;
+\end{minted}
+
+L'accès au contenu de la structure dépend de la façon dont elle a été instanciée.
+Le code suivant présente les différentes façons de procéder.
+
+\inputminted{c}{struct.c}
+
+Créez à présent votre propre structure permettant de contenir la note finale de tous vos cours de l'année.
+Veillez à choisir le type optimal pour minimiser l'espace occupé par votre structure.
+Quelle sera sa taille totale ?
+\end{Q}
+
+
+
+
+
+
+
+
+
+
+
+% ########     #####    ########   ##      ##  ##########  #########  ########   
+% ##     ##  ##     ##     ##      ###     ##      ##      ##         ##     ##  
+% ##     ##  ##     ##     ##      ## ##   ##      ##      ##         ##     ##  
+% #######    ##     ##     ##      ##  ##  ##      ##      ######     ########   
+% ##         ##     ##     ##      ##   ## ##      ##      ##         ##   ##    
+% ##         ##     ##     ##      ##     ###      ##      ##         ##    ##   
+% ##           #####    ########   ##      ##      ##      #########  ##     ## 
+\begin{Q} \textbf{Pointers}
+Le code ci-dessous présente le fonctionnement des pointeurs.
+Exécutez le code pour observer les changements de valeur et d'adresse.
+
+\inputminted[%
+fontsize=\footnotesize,
+tabsize=4,
+]{c}{pointeurs.c}
+\end{Q}
+
+
+
+
+
+
+
+% ##########     ###     ########   
+%     ##        ## ##    ##     ##  
+%     ##       ##   ##   ##     ##  
+%     ##      ##     ##  ########   
+%     ##      #########  ##     ##  
+%     ##      ##     ##  ##     ##  
+%     ##      ##     ##  ########   
+
+\begin{Q} \textbf{Arrays}
+
+Travaillez avec le code suivant pour vour familiariser avec le fonctionnement des tableaux.
+
+\inputminted[%
+fontsize=\footnotesize,
+tabsize=4,
+]{c}{tab.c}
+
+Comment créer un tableau à double entrée ?
+Comment lui allouer de la mémoire dynamiquement ?
+\end{Q}
+
+
+
+
+
+
+%  #######   ##########  ########   ########   ##      ##   #######   
+% ##     ##      ##      ##     ##     ##      ###     ##  ##         
+% ##             ##      ##     ##     ##      ## ##   ##  ##         
+%  #######       ##      ########      ##      ##  ##  ##  ##   ####  
+%        ##      ##      ##   ##       ##      ##   ## ##  ##     ##  
+% ##     ##      ##      ##    ##      ##      ##     ###  ##     ##  
+%  #######       ##      ##     ##  ########   ##      ##  ########   
+\begin{Q} \textbf{String}
+
+Une chaîne de caractères n'est rien d'autre qu'un tableau de \texttt{char} se terminant par le caractère \texttt{\textbackslash0}.
+Elle peut être initialisée de plusieurs façons différentes~:
+
+\begin{minted}{c}
+char foo[4] = {'f', 'o', 'o', '\0'};
+char *bar = "bar";
+char baz[] = "baz";
+\end{minted}
+
+Pour afficher un caractère seul ou une chaîne de caractères entière, on utilise les arguments suivants~:
+\begin{minted}{c}
+printf("%c, %s", char, string);
+\end{minted}
+\end{Q}
+
+
+
+
+
+
+
+
+
+
+%    ###      #######    #######   ########   ########   
+%   ## ##    ##     ##  ##     ##     ##         ##      
+%  ##   ##   ##         ##            ##         ##      
+% ##     ##   #######   ##            ##         ##      
+% #########         ##  ##            ##         ##      
+% ##     ##  ##     ##  ##     ##     ##         ##      
+% ##     ##   #######    #######   ########   ########   
+\begin{Q} \textbf{ASCII}
+
+Un caractère peut être contenu dans une variable de type \texttt{char}.
+Cependant, cette variable n'a que le sens qu'on lui donne.
+
+Quelle est la différence entre ces trois variables ?
+
+\begin{minted}{c}
+char a = 0x42;
+char b = 66;
+char c = 'B';
+\end{minted}
+
+Il existe une correspondance entre ces trois valeurs qui est reprise dans la table \texttt{ASCII}.
+Vous pouvez y accéder facilement sous Linux en tapant \texttt{man ascii} dans un terminal.
+
+Traduisez la chaîne de caractère suivante~: \texttt{char foo[64] = \{73, 32, 115, 117, 114, 101, 32, 104, 111, 112, 101, 32, 121, 111, 117, 32, 100, 105, 100, 32, 110, 111, 116, 32, 99, 111, 110, 118, 101, 114, 116, 32, 116, 104, 105, 115, 32, 115, 116, 114, 105, 110, 103, 32, 98, 121, 32, 104, 97, 110, 100, 46, 10, 85, 115, 101, 32, 112, 114, 105, 110, 116, 102, 46\};}
+
+\end{Q}
+
+
+
+
+
+
+
+
+
+%  #######     #####    ##      ##  ######     ########   ##########  ########     #####    ##      ##  
+% ##     ##  ##     ##  ###     ##  ##    ##      ##          ##         ##      ##     ##  ###     ##  
+% ##         ##     ##  ## ##   ##  ##     ##     ##          ##         ##      ##     ##  ## ##   ##  
+% ##         ##     ##  ##  ##  ##  ##     ##     ##          ##         ##      ##     ##  ##  ##  ##  
+% ##         ##     ##  ##   ## ##  ##     ##     ##          ##         ##      ##     ##  ##   ## ##  
+% ##     ##  ##     ##  ##     ###  ##    ##      ##          ##         ##      ##     ##  ##     ###  
+%  #######     #####    ##      ##  ######     ########       ##      ########     #####    ##      ##  
+\begin{Q} \textbf{Condition}
+
+Le code suivant présente la syntaxe de la structure conditionnelle \texttt{if}.
+
+\inputminted[%
+fontsize=\footnotesize,
+tabsize=4,
+]{c}{condition.c}
+
+La structure conditionnelle ternaire permet de condenser certaines parties du code.
+Cette structure fonctionne de la façon suivante~:
+
+\texttt{if (foo == 1) ? /* résultat si condition vraie */ : /* résultat si condition fausse */;}
+
+Réécrivez le code du début de la question en utilisant des expressions ternaires.
+\end{Q}
+
+
+
+
+
+
+
+% ##           #####      #####    ########   
+% ##         ##     ##  ##     ##  ##     ##  
+% ##         ##     ##  ##     ##  ##     ##  
+% ##         ##     ##  ##     ##  #######    
+% ##         ##     ##  ##     ##  ##         
+% ##         ##     ##  ##     ##  ##         
+% #########    #####      #####    ##        
+\begin{Q} \textbf{Loop}
+
+Il existe plusieurs façon d'exécuter une boucle en C : \texttt{while}, \texttt{for} et \texttt{do while}.
+Le code suivant présente leur syntaxe.
+
+Quelle sera la sortie dans les différentes boucles ?
+
+\inputminted[%
+fontsize=\footnotesize,
+tabsize=4,
+]{c}{loop.c}
+\end{Q}
+
+
+
+
+
+
+
+
+
+
+% ##           #####     #######   ########    #######   
+% ##         ##     ##  ##            ##      ##     ##  
+% ##         ##     ##  ##            ##      ##         
+% ##         ##     ##  ##   ####     ##      ##         
+% ##         ##     ##  ##     ##     ##      ##         
+% ##         ##     ##  ##     ##     ##      ##     ##  
+% #########    #####    ########   ########    #######   
+\begin{Q} \textbf{Opérations logiques}
+
+Une variable peut être déclarée de plusieurs façons différentes~:
+\begin{minted}{c}
+char a = 8; // décimal
+char b = 0x8; // Hexadécimal
+char c = 'f'; // Caractère
+char d = 08; // Octal
+char e = 0b1000; // Binaire
+\end{minted}
+
+En plus de ces déclarations, il existe des opérateurs permettant d'effectuer des opérations logiques «~bit-à-bit~»~:
+\begin{center}
+	\begin{tabular}{|l|l|l|} \hline
+	\& & AND & 0 \& 1 = 0\\ \hline
+	| & OR & 0 | 1 = 0\\ \hline
+	\textasciicircum & XOR & 0b0101 \textasciicircum 0b1111 = 0b1010\\ \hline
+	\texttildelow & NOT & \texttildelow 0b1010 = 0b0101\\ \hline
+	$<<$ & Décalage à gauche & 0b001 $<<$ 2 = 0b100 \\ \hline
+	$>>$ & Décalage à droite & 0b110 $>>$ 2 = 0b001 \\ \hline
+	\end{tabular}
+\end{center}
+
+
+Complétez le code suivant pour afficher un nombre décimal sous sa forme binaire.
+\begin{minted}{c}
+#include <stdio.h>
+
+int main(){
+	int n;
+	printf("Entrez un nombre entier: ");
+	scanf("%i", &n);
+
+	/* ... */
+
+	return EXIT_SUCCESS;
+}
+\end{minted}
+\end{Q}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% #########  ########   ########     #####    ########    #######   
+% ##         ##     ##  ##     ##  ##     ##  ##     ##  ##     ##  
+% ##         ##     ##  ##     ##  ##     ##  ##     ##  ##         
+% ######     ########   ########   ##     ##  ########    #######   
+% ##         ##   ##    ##   ##    ##     ##  ##   ##           ##  
+% ##         ##    ##   ##    ##   ##     ##  ##    ##   ##     ##  
+% #########  ##     ##  ##     ##    #####    ##     ##   #######   
+\begin{Q} \textbf{Errors}
+
+Corrigez le code suivant pour qu'il compile correctement.
+
+\inputminted[%
+fontsize=\footnotesize,
+tabsize=4,
+]{c}{errors.c}
+
+En quoi l'exécution est-elle problématique ?
+\end{Q}
+
+
+
+
+
+
+
+%  #######   ##       ##  
+% ##     ##  ###     ###  
+% ##         ## ## ## ##  
+%  #######   ##  ###  ##  
+%        ##  ##       ##  
+% ##     ##  ##       ##  
+%  #######   ##       ##  
+\begin{Q} \textbf{SM}
+
+	Un ouvre-porte $Z_1$ est commandé par deux boutons $a$ et $b$ qu'il faut actionner dans le bon ordre sous peine de déclencher une alarme $Z_2$.
+	Celui-ci est décrit par la table de Huffman ci-dessous.
+	Implémentez l'automate correspondant en C.
+
+	\begin{center}
+		\begin{tabular}{|l|l|l|l|l|l|l|} \hline
+			\multirow{2}{*}{} & \multicolumn{4}{c|}{$ab$} & \multirow{2}{*}{$Z_1$} & \multirow{2}{*}{$Z_2$} \\ \cline{2-5}
+			& 00 & 01 & 11 & 10 & & \\ \hline
+			1 & \textbf{1} & 5 & 5 & 2 & 0 & 0 \\ \hline
+			2 & 3 & 5 & 5 & \textbf{2} & 0 & 0 \\ \hline
+			3 & \textbf{3} & 4 & 5 & 5 & 0 & 0 \\ \hline
+			4 & 1 & \textbf{4} & 5 & 5 & 1 & 0 \\ \hline
+			5 & 1 & \textbf{5} & \textbf{5} & \textbf{5} & 0 & 1 \\ \hline
+		\end{tabular}
+	\end{center}
+
+\ifnum\value{reponseCnt}=1
+  \lstinputlisting[language=c,%
+	commentstyle=\color{colComments}\textit,%
+	float=hbp,%
+	basicstyle=\ttfamily\footnotesize, %
+	identifierstyle=\color{colIdentifier}, %
+	keywordstyle=\color{colKeys}, %
+	stringstyle=\color{colString}, %
+  otherkeywords={bool},%
+	columns=flexible, %
+	tabsize=2, %
+	extendedchars=true, %
+	showspaces=false, %
+	showstringspaces=false, %
+	% numbers=left, %
+	numberstyle=\tiny, %
+	breaklines=true, %
+	breakautoindent=true, %
+	captionpos=b,%
+	frame=lines]{sm.c}
+\fi
+
+\end{Q}
+
+
+
+
+
+% ##       ##     ###     ##      ##  ########      ###      #######   #########  
+% ###     ###    ## ##    ###     ##  ##     ##    ## ##    ##         ##         
+% ## ## ## ##   ##   ##   ## ##   ##  ##     ##   ##   ##   ##         ##         
+% ##  ###  ##  ##     ##  ##  ##  ##  #######    ##     ##  ##   ####  ######     
+% ##       ##  #########  ##   ## ##  ##         #########  ##     ##  ##         
+% ##       ##  ##     ##  ##     ###  ##         ##     ##  ##     ##  ##         
+% ##       ##  ##     ##  ##      ##  ##         ##     ##  ########   #########  
+\begin{Q} \textbf{RTFM}
+
+Toutes les fonctions présentes dans les bibliothèques standards ont un manuel.
+Sous Linux, ces informations sont directement accessibles en tapant «~man 3 nom\_de\_la\_fonction~» dans un terminal, le «~3~» indiquant qu'on souhaite accéder à la section du manuel afférente au C.
+
+Ces \textit{man pages} sont aussi accessibles en ligne, comme par exemple pour la fonction \texttt{printf} : \url{https://linux.die.net/man/3/printf}.
+
+\end{Q}
+
+
+\begin{Q}
+En utilisant le manuel de la bibliothèque \texttt{string} et celui de la fonction \texttt{printf}, concaténez deux chaînes de caractères \texttt{foo} et \texttt{bar} dans une troisième \texttt{baz} et imprimez-la dans la console.
+
+\inputminted[%
+fontsize=\footnotesize,
+tabsize=4,
+]{c}{concat.c}
+\end{Q}
+
+
+% \ifnum\value{reponseCnt}=1
+%   \newpage
+% \fi
+
+
+
+\begin{Q}
+En incluant la bibliothèque \texttt{bool.h}, il est possible d'utiliser le type \texttt{bool} pouvant prendre les valeurs \texttt{true} ou \texttt{false}.
+Cependant, la fonction \texttt{printf} n'a pas de modificateur pour ce type, il n'est donc pas possible par défaut d'afficher «~true~» ou «~false~» directement dans la console comme on afficherait la valeur d'un \texttt{int} avec le modificateur \texttt{\%i}.
+
+Utilisez vos connaissances des expressions ternaires et de la fonction \texttt{printf} pour combler ce manque.
+\end{Q}
+
+
+
+
+
+
+
+% #########  ##     ##  ##      ##   #######   ##########  ########     #####    ##      ##  
+% ##         ##     ##  ###     ##  ##     ##      ##         ##      ##     ##  ###     ##  
+% ##         ##     ##  ## ##   ##  ##             ##         ##      ##     ##  ## ##   ##  
+% ######     ##     ##  ##  ##  ##  ##             ##         ##      ##     ##  ##  ##  ##  
+% ##         ##     ##  ##   ## ##  ##             ##         ##      ##     ##  ##   ## ##  
+% ##         ##     ##  ##     ###  ##     ##      ##         ##      ##     ##  ##     ###  
+% ##          #######   ##      ##   #######       ##      ########     #####    ##      ##  
+\begin{Q} \textbf{Function}
+
+Comme dans la plupart des langages, il est possible de créer des fonctions en C.
+Leur structure générale est la suivante~:
+
+\begin{minted}{c}
+<return type> function (<type> arg1, <type> arg2) {
+	return <return variable>
+}
+\end{minted}
+
+Ce qui est proche du Python~:
+\begin{minted}{python}
+def function(arg1, arg2) :
+    return <return variable>
+\end{minted}
+
+Ou encore des méthodes en Java~:
+\begin{minted}{java}
+<access modifier> <return type> function(<type> arg1, <type> arg2) {
+	return <return variable>
+}
+\end{minted}
+
+Il existe trois niveaux différents à une fonction~:
+\begin{minted}{c}
+/* Prototype */
+int func(int a, int b);
+
+void main() {
+	int a, int b;
+
+	/* Call */
+	int c = func(a, b);
+}
+
+/* Declaration */
+int func(int a, int b) {
+	return a+b;
+}
+\end{minted}
+
+Il faut veiller à plusieurs choses~:
+\begin{itemize}
+	\item N'appeler la fonction qu'après sa déclaration ou après son prototype.
+	Si on appelle la fonction à la ligne 50 du code, il faut qu'elle ait été déclérée avant cette ligne ou que son prototype se trouve avant cette ligne.
+	\item Le type de la fonction doit être le type de la variable de retour.
+	\item Si la fonction en renvoie aucune variable, elle est de type \texttt{void}.
+\end{itemize}
+\end{Q}
+
+
+
+
+\begin{Q} \textbf{Arguments}
+
+Il existe deux façons de passer des arguments à une fonction en C~: par valeur ou par variable.
+
+Dans le premier cas, on donne la valeur de la variable en argument de la fonction.
+Lorsque cette dernière est exécutée, elle commence par créer une nouvelle variable pour chaque arguments et les initialise à la valeur renseignée.
+Ainsi, les variables données en arguments ne sont pas modifiées, on utilise simplement leur valeur.
+\begin{minted}{c}
+void func(int a) {
+	a++;
+}
+
+void main() {
+	int a = 2;
+	func(a); // 'a' est toujours égal à 2.
+}
+\end{minted}
+
+De le second cas, on donne l'adresse de la variable en argument et on travaille avec son pointeur dans la fonction.
+Cette fois-ci, la variable n'est plus copiée et on travaille directement sur l'original.
+\begin{minted}{c}
+void func(int * a) {
+	*a++;
+}
+
+void main() {
+	int a = 2;
+	func(&a); // a = 3.
+}
+\end{minted}
+
+
+\end{Q}
+
+
+
+\begin{Q}
+Écrivez une fonction récursive calculant les $n$ premiers termes de la suite de Fibonacci.
+\end{Q}
+
+
+
+
+\begin{Q}
+Écrivez une fonction \texttt{void doubleStr(char* str)} recevant une chaîne de caractère et doublant son contenu.
+Par exemple~:
+\begin{minted}{c}
+char * str="coucou";
+printf("%s\n", str); // coucou
+doubleStr(str);
+printf("%s\n", str); // coucoucoucou
+\end{minted}
+\end{Q}
+
+
+
+
+
+
+
+% ##     ##  #########     ###     ######     #########  ########   
+% ##     ##  ##           ## ##    ##    ##   ##         ##     ##  
+% ##     ##  ##          ##   ##   ##     ##  ##         ##     ##  
+% #########  ######     ##     ##  ##     ##  ######     ########   
+% ##     ##  ##         #########  ##     ##  ##         ##   ##    
+% ##     ##  ##         ##     ##  ##    ##   ##         ##    ##   
+% ##     ##  #########  ##     ##  ######     #########  ##     ##  
+\begin{Q} \textbf{Header}
+
+Lorque le nombre de fonctions augmente dans votre programme, il faut commencer à organiser son code.
+Pour ce faire, on ne garde pas tout dans un seul fichier \texttt{main.c}, mais on regroupe certaines fonctions dans des fichiers séparés.
+Deux types de fichiers sont utilisés en C~: les \texttt{.h}, contenant les prototypes des fonctions, et les \texttt{.c} contenant leurs déclarations. Cette séparation fonctionnelle des deux types de fichiers est purement conventionnelle, il est tout à fait possible de déclarer une fonction dans un \texttt{.h}.
+
+Par exemple, votre code de la question précédente pourrait ressembler à ceci :
+\begin{minted}{c}
+/* doublestr.h */
+void doubleStr(char* str);
+
+/* doublestr.c */
+#include "doublestr.h"
+
+void doubleStr(char* str) {
+	/* Contenu de la fonction */
+}
+
+/* main.c */
+#include <stdio.h>
+#include "doublestr.h"
+
+int main() {
+	/* ... */
+]
+\end{minted}
+
+Si vous utilisez GCC en ligne de commande, la commande de compilation devient alors~: \texttt{gcc -Wall main.c doublestr.c}
+Dans Codeblocks, il suffit d'ajouter les fichiers au projet et l'IDE s'occupe du reste dans les coulisses.
+
+Vous aurez remarqué que \texttt{doublestr.h} est inclus dans l'en-tête du fichier \texttt{main.c}.
+C'est ainsi qu'il sait que la fonction \texttt{doubleStr} existe et où aller la chercher.
+De plus, ce header étant un fichier faisant partie du projet, on indique au compilateur d'aller chercher le \texttt{.h} dans le dossier courant en mettant son nom entre guillemets.
+Lorsque l'on souhaite utiliser une bibliothèque standard comme \texttt{stdio.h}, on met son nom entre chevrons et le compilateur ira chercher le fichier dans le dossier d'installation correspondant quelque part dans le système.
+
+Reprenez vos fonctions \texttt{doubleStr} et \texttt{fibonacci}, placez-les dans des headers séparés et vérifier que votre programme fonctionne toujours.
+\end{Q}
+
+
+
+
+\begin{Q}
+Implémentez la méthode de Quine-McCluskey.
+\end{Q}
+
+
+\begin{Q}
+Écrivez une fonction permettant de détecter les problèmes de course dans une table de Huffman donnée en paramètre sous forme d'un tableau à double entrée.
+\end{Q}
+
+
+\begin{Q}
+Écrivez une fonction permettant d'extraire les K-maps sous-jacentes d'une table de Huffman donnée paramètre.
+\end{Q}
+
+\end{document}
