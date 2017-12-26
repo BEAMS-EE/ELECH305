@@ -22,7 +22,7 @@ int main()
 	char * tabii = (char*)malloc(a*sizeof(char));
 
 	/* However, when we check the table size:*/
-	printf("%lu\n",sizeof(tab));
+	printf("%lu\n",sizeof(tabii));
 	/* we do not get the actual size of the array, but only the size of the
 	pointer. The variable 'a' needs to ne kept in order to remember the size
 	of the allocated array.*/

@@ -77,7 +77,7 @@ tabsize=4}
 \usepackage{enumitem}
 \setlist[enumerate]{label=\alph*)}% If you want only the x-th level to use this format, use '[enumerate,x]'
 
-\newdateformat{mydate}{v1.0.0}%hack pour remplacer \THEYEAR
+\newdateformat{mydate}{v1.1.0}%hack pour remplacer \THEYEAR
 
 %cyr
 \newcommand\textcyr[1]{{\fontencoding{OT2}\fontfamily{wncyr}\selectfont #1}}
@@ -110,7 +110,7 @@ tabsize=4}
 %% fancy header & foot
 \pagestyle{fancy}
 \lhead{[ELEC-H-305] Circuits logiques et numériques\\ \tpnumber }
-\rhead{v1.0.0\\ page \thepage}
+\rhead{v1.1.0\\ page \thepage}
 \chead{\ifthenelse{\boolean{corrige}}{Corrigé}{}}
 \cfoot{}
 %%
@@ -209,6 +209,38 @@ Complétez le tableau suivant avec les valeurs maximales et minimales de chacun 
 	unsigned char & & \\ \hline
 	\end{tabular}
 \end{center}
+
+\reponse{
+Le taille exacte de chacun des types dépend de leur implémentation.
+Cependant, le standard impose les contraintes suivantes~:
+
+\begin{itemize}
+	\item \texttt{char} : minimum 8 bits
+	\item \texttt{short} : minimum 16 bits
+	\item \texttt{int} : minimum 16 bits
+	\item \texttt{long} : minimum 32 bits
+	\item \texttt{long long} : minimum 64 bits
+\end{itemize}
+
+Le code \texttt{type-min-max.c} permet de remplir le tableau.
+
+\begin{center}
+	\begin{tabular}{|l|r|r|} \hline
+	Type & Minimum & Maximum \\ \hline
+	int & 2147483647 & -2147483648 \\ \hline
+	unsigned int & 4294967295 & 0 \\ \hline
+	short & 32767 & -32768 \\ \hline
+	unsigned short & 65535 & 0 \\ \hline
+	long & 9223372036854775808 & -9223372036854775808 \\ \hline
+	unsigned long & 18446744073709551616 & 0 \\ \hline
+	float & 2147483647 & -2147483648 \\ \hline
+	double & 9223372036854775808 & -9223372036854775808 \\ \hline
+	char & 127 & -128 \\ \hline
+	unsigned char & 255 & 0 \\ \hline
+	\end{tabular}
+\end{center}
+}
+
 \end{Q}
 
 
@@ -234,6 +266,13 @@ Dans le code suivant, quelle sera la sortie ?
 fontsize=\footnotesize,
 tabsize=4,
 ]{c}{type-overflow.c}
+
+\reponse{~\\
+
+\texttt{a = 2147483647, a+1 = -2147483648}
+
+\texttt{b = 0, b-1 = 4294967295}
+}
 \end{Q}
 
 
@@ -260,6 +299,17 @@ short res1 = a * b / c;
 short res2 = a / d * b;
 short res3 = b * c / d;
 \end{minted}
+
+\reponse{
+En règle générale, il vaut mieux placer la division à la fin de l'opération afin de limiter la perte de précision.
+Cependant, en fonction du compilateur utilisé, il faut aussi s'assurer que le résultat intermédiaire ne dépasse pas le maximum du type utilisé.
+
+\texttt{short res1 = a * b / c;}
+
+\texttt{short res2 = a * b / d;}
+
+\texttt{short res3 = c / d * b;}
+}
 \end{Q}
 
 
@@ -295,6 +345,13 @@ Castez correctement le code suivant pour obtenir les bons résultats aux différ
 fontsize=\footnotesize,
 tabsize=4,
 ]{c}{cast.c}
+
+\reponse{~\\
+
+\texttt{char prod = a*b;}
+
+\texttt{float div = (float)a/b;}
+}
 \end{Q}
 
 
@@ -342,7 +399,7 @@ Afin d'éviter de devoir écrire \texttt{struct} à chaque fois que l'on veut cr
 typedef struct MyStruct Mystruct;
 \end{minted}
 
-\texttt{typedef} fonctionne ainsi : je déclare une type (\texttt{typedef}) portant le nom «~\texttt{MyStruct}~» et étant en réalité un «~\texttt{struct Mystruct}~».
+\texttt{typedef} fonctionne ainsi : je déclare une type (\texttt{typedef}) portant le nom «~\texttt{MyStruct}~» et étant en réalité un «~\texttt{struct MyStruct}~».
 On peut à présent redéclarer \texttt{foo}~:
 
 \begin{minted}{c}
@@ -354,9 +411,15 @@ Le code suivant présente les différentes façons de procéder.
 
 \inputminted{c}{struct.c}
 
-Créez à présent votre propre structure permettant de contenir la note finale de tous vos cours de l'année.
+Créez à présent votre propre structure permettant de contenir la note finale de tous vos cours de l'année, en supposant que toutes les notes sont arrondies à l'unité.
 Veillez à choisir le type optimal pour minimiser l'espace occupé par votre structure.
 Quelle sera sa taille totale ?
+
+\reponse{
+Chaque note étant comprise entre 0 et 20, un \texttt{char} suffit à contenir la note.
+La taille de la structure  est simplement la somme de la taille des variables la constituant.
+}
+
 \end{Q}
 
 
@@ -376,7 +439,7 @@ Quelle sera sa taille totale ?
 % ##         ##     ##     ##      ##   ## ##      ##      ##         ##   ##    
 % ##         ##     ##     ##      ##     ###      ##      ##         ##    ##   
 % ##           #####    ########   ##      ##      ##      #########  ##     ## 
-\begin{Q} \textbf{Pointers}
+\begin{Q} \textbf{Pointeurs}
 Le code ci-dessous présente le fonctionnement des pointeurs.
 Exécutez le code pour observer les changements de valeur et d'adresse.
 
@@ -411,6 +474,28 @@ tabsize=4,
 
 Comment créer un tableau à double entrée ?
 Comment lui allouer de la mémoire dynamiquement ?
+
+\ifnum\value{reponseCnt}=1
+  \lstinputlisting[language=c,%
+	commentstyle=\color{colComments}\textit,%
+	float=hbp,%
+	basicstyle=\ttfamily\footnotesize, %
+	identifierstyle=\color{colIdentifier}, %
+	keywordstyle=\color{colKeys}, %
+	stringstyle=\color{colString}, %
+  otherkeywords={bool},%
+	columns=flexible, %
+	tabsize=2, %
+	extendedchars=true, %
+	showspaces=false, %
+	showstringspaces=false, %
+	% numbers=left, %
+	numberstyle=\tiny, %
+	breaklines=true, %
+	breakautoindent=true, %
+	captionpos=b,%
+	frame=lines]{tab-double.c}
+\fi
 \end{Q}
 
 
@@ -471,11 +556,20 @@ char b = 66;
 char c = 'B';
 \end{minted}
 
+\reponse{
+Aucune, ce sont trois modes de représentation équivalents.
+}
+
 Il existe une correspondance entre ces trois valeurs qui est reprise dans la table \texttt{ASCII}.
 Vous pouvez y accéder facilement sous Linux en tapant \texttt{man ascii} dans un terminal.
 
 Traduisez la chaîne de caractère suivante~: \texttt{char foo[64] = \{73, 32, 115, 117, 114, 101, 32, 104, 111, 112, 101, 32, 121, 111, 117, 32, 100, 105, 100, 32, 110, 111, 116, 32, 99, 111, 110, 118, 101, 114, 116, 32, 116, 104, 105, 115, 32, 115, 116, 114, 105, 110, 103, 32, 98, 121, 32, 104, 97, 110, 100, 46, 10, 85, 115, 101, 32, 112, 114, 105, 110, 116, 102, 46\};}
 
+\reponse{~\\
+
+I sure hope you did not convert this string by hand.
+
+Use printf.}
 \end{Q}
 
 
@@ -505,9 +599,31 @@ tabsize=4,
 La structure conditionnelle ternaire permet de condenser certaines parties du code.
 Cette structure fonctionne de la façon suivante~:
 
-\texttt{if (foo == 1) ? /* résultat si condition vraie */ : /* résultat si condition fausse */;}
+\texttt{(foo == 1) ? /* résultat si condition vraie */ : /* résultat si condition fausse */;}
 
 Réécrivez le code du début de la question en utilisant des expressions ternaires.
+
+\ifnum\value{reponseCnt}=1
+  \lstinputlisting[language=c,%
+	commentstyle=\color{colComments}\textit,%
+	float=hbp,%
+	basicstyle=\ttfamily\footnotesize, %
+	identifierstyle=\color{colIdentifier}, %
+	keywordstyle=\color{colKeys}, %
+	stringstyle=\color{colString}, %
+  otherkeywords={bool},%
+	columns=flexible, %
+	tabsize=2, %
+	extendedchars=true, %
+	showspaces=false, %
+	showstringspaces=false, %
+	% numbers=left, %
+	numberstyle=\tiny, %
+	breaklines=true, %
+	breakautoindent=true, %
+	captionpos=b,%
+	frame=lines]{ternary.c}
+\fi
 \end{Q}
 
 
@@ -567,7 +683,7 @@ En plus de ces déclarations, il existe des opérateurs permettant d'effectuer d
 \begin{center}
 	\begin{tabular}{|l|l|l|} \hline
 	\& & AND & 0 \& 1 = 0\\ \hline
-	| & OR & 0 | 1 = 0\\ \hline
+	| & OR & 0 | 1 = 1\\ \hline
 	\textasciicircum & XOR & 0b0101 \textasciicircum 0b1111 = 0b1010\\ \hline
 	\texttildelow & NOT & \texttildelow 0b1010 = 0b0101\\ \hline
 	$<<$ & Décalage à gauche & 0b001 $<<$ 2 = 0b100 \\ \hline
@@ -590,9 +706,30 @@ int main(){
 	return EXIT_SUCCESS;
 }
 \end{minted}
+
+\ifnum\value{reponseCnt}=1
+	\newpage
+  \lstinputlisting[language=c,%
+	commentstyle=\color{colComments}\textit,%
+	float=hbp,%
+	basicstyle=\ttfamily\footnotesize, %
+	identifierstyle=\color{colIdentifier}, %
+	keywordstyle=\color{colKeys}, %
+	stringstyle=\color{colString}, %
+  otherkeywords={bool},%
+	columns=flexible, %
+	tabsize=2, %
+	extendedchars=true, %
+	showspaces=false, %
+	showstringspaces=false, %
+	% numbers=left, %
+	numberstyle=\tiny, %
+	breaklines=true, %
+	breakautoindent=true, %
+	captionpos=b,%
+	frame=lines]{dectobin.c}
+\fi
 \end{Q}
-
-
 
 
 
@@ -623,6 +760,31 @@ tabsize=4,
 ]{c}{errors.c}
 
 En quoi l'exécution est-elle problématique ?
+
+\reponse{La boucle est infinie, il faut changer sa condition.}
+
+\ifnum\value{reponseCnt}=1
+	\newpage
+  \lstinputlisting[language=c,%
+	commentstyle=\color{colComments}\textit,%
+	float=hbp,%
+	basicstyle=\ttfamily\footnotesize, %
+	identifierstyle=\color{colIdentifier}, %
+	keywordstyle=\color{colKeys}, %
+	stringstyle=\color{colString}, %
+  otherkeywords={bool},%
+	columns=flexible, %
+	tabsize=2, %
+	extendedchars=true, %
+	showspaces=false, %
+	showstringspaces=false, %
+	% numbers=left, %
+	numberstyle=\tiny, %
+	breaklines=true, %
+	breakautoindent=true, %
+	captionpos=b,%
+	frame=lines]{errors-corr.c}
+\fi
 \end{Q}
 
 
@@ -657,6 +819,7 @@ En quoi l'exécution est-elle problématique ?
 	\end{center}
 
 \ifnum\value{reponseCnt}=1
+\newpage
   \lstinputlisting[language=c,%
 	commentstyle=\color{colComments}\textit,%
 	float=hbp,%
@@ -664,7 +827,7 @@ En quoi l'exécution est-elle problématique ?
 	identifierstyle=\color{colIdentifier}, %
 	keywordstyle=\color{colKeys}, %
 	stringstyle=\color{colString}, %
-  otherkeywords={bool},%
+	otherkeywords={bool},%
 	columns=flexible, %
 	tabsize=2, %
 	extendedchars=true, %
@@ -708,6 +871,29 @@ En utilisant le manuel de la bibliothèque \texttt{string} et celui de la foncti
 fontsize=\footnotesize,
 tabsize=4,
 ]{c}{concat.c}
+
+\ifnum\value{reponseCnt}=1
+\newpage
+  \lstinputlisting[language=c,%
+	commentstyle=\color{colComments}\textit,%
+	float=hbp,%
+	basicstyle=\ttfamily\footnotesize, %
+	identifierstyle=\color{colIdentifier}, %
+	keywordstyle=\color{colKeys}, %
+	stringstyle=\color{colString}, %
+	otherkeywords={bool},%
+	columns=flexible, %
+	tabsize=2, %
+	extendedchars=true, %
+	showspaces=false, %
+	showstringspaces=false, %
+	% numbers=left, %
+	numberstyle=\tiny, %
+	breaklines=true, %
+	breakautoindent=true, %
+	captionpos=b,%
+	frame=lines]{concat-corr.c}
+\fi
 \end{Q}
 
 
@@ -718,10 +904,33 @@ tabsize=4,
 
 
 \begin{Q}
-En incluant la bibliothèque \texttt{bool.h}, il est possible d'utiliser le type \texttt{bool} pouvant prendre les valeurs \texttt{true} ou \texttt{false}.
+En incluant la bibliothèque \texttt{stdbool.h}, il est possible d'utiliser le type \texttt{bool} pouvant prendre les valeurs \texttt{true} ou \texttt{false}.
 Cependant, la fonction \texttt{printf} n'a pas de modificateur pour ce type, il n'est donc pas possible par défaut d'afficher «~true~» ou «~false~» directement dans la console comme on afficherait la valeur d'un \texttt{int} avec le modificateur \texttt{\%i}.
 
 Utilisez vos connaissances des expressions ternaires et de la fonction \texttt{printf} pour combler ce manque.
+
+\ifnum\value{reponseCnt}=1
+% \newpage
+  \lstinputlisting[language=c,%
+	commentstyle=\color{colComments}\textit,%
+	float=hbp,%
+	basicstyle=\ttfamily\footnotesize, %
+	identifierstyle=\color{colIdentifier}, %
+	keywordstyle=\color{colKeys}, %
+	stringstyle=\color{colString}, %
+	otherkeywords={bool},%
+	columns=flexible, %
+	tabsize=2, %
+	extendedchars=true, %
+	showspaces=false, %
+	showstringspaces=false, %
+	% numbers=left, %
+	numberstyle=\tiny, %
+	breaklines=true, %
+	breakautoindent=true, %
+	captionpos=b,%
+	frame=lines]{printbool.c}
+\fi
 \end{Q}
 
 
@@ -829,6 +1038,29 @@ void main() {
 
 \begin{Q}
 Écrivez une fonction récursive calculant les $n$ premiers termes de la suite de Fibonacci.
+
+\ifnum\value{reponseCnt}=1
+% \newpage
+  \lstinputlisting[language=c,%
+	commentstyle=\color{colComments}\textit,%
+	float=hbp,%
+	basicstyle=\ttfamily\footnotesize, %
+	identifierstyle=\color{colIdentifier}, %
+	keywordstyle=\color{colKeys}, %
+	stringstyle=\color{colString}, %
+	otherkeywords={bool},%
+	columns=flexible, %
+	tabsize=2, %
+	extendedchars=true, %
+	showspaces=false, %
+	showstringspaces=false, %
+	% numbers=left, %
+	numberstyle=\tiny, %
+	breaklines=true, %
+	breakautoindent=true, %
+	captionpos=b,%
+	frame=lines]{fibbo.c}
+\fi
 \end{Q}
 
 
@@ -843,6 +1075,29 @@ printf("%s\n", str); // coucou
 doubleStr(str);
 printf("%s\n", str); // coucoucoucou
 \end{minted}
+
+\ifnum\value{reponseCnt}=1
+% \newpage
+  \lstinputlisting[language=c,%
+	commentstyle=\color{colComments}\textit,%
+	float=hbp,%
+	basicstyle=\ttfamily\footnotesize, %
+	identifierstyle=\color{colIdentifier}, %
+	keywordstyle=\color{colKeys}, %
+	stringstyle=\color{colString}, %
+	otherkeywords={bool},%
+	columns=flexible, %
+	tabsize=2, %
+	extendedchars=true, %
+	showspaces=false, %
+	showstringspaces=false, %
+	% numbers=left, %
+	numberstyle=\tiny, %
+	breaklines=true, %
+	breakautoindent=true, %
+	captionpos=b,%
+	frame=lines]{doublestr.c}
+\fi
 \end{Q}
 
 
