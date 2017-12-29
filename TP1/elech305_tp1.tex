@@ -31,7 +31,7 @@
 \setlist[itemize]{label=$\bullet$}
 \usepackage{multirow}
 
-\newcommand\version{v1.0.0}
+\newcommand\version{v1.1.0}
 
 %cyr
 \newcommand\textcyr[1]{{\fontencoding{OT2}\fontfamily{wncyr}\selectfont #1}}
@@ -63,7 +63,7 @@
 %% fancy header & foot
 \pagestyle{fancy}
 \lhead{[ELEC-H-310] Électronique numérique\\ \tpnumber}
-\rhead{\mydate\today\\ page \thepage}
+\rhead{\version\\ page \thepage}
 \chead{\ifthenelse{\boolean{corrige}}{Corrigé}{}}
 \cfoot{}
 %%
@@ -96,7 +96,7 @@ pdfsubject={}
 \setlength{\parindent}{0pt}
 
 \begin{document}
-\pagestyle{empty}
+% \pagestyle{empty}
 \maketitle
 \vspace*{-1cm}
 
@@ -301,7 +301,7 @@ Effectuer les opérations suivantes~:
 		  &   &   &   &   &   &   &         &   &                       &   & 1 & 1 & 1 & $\cdot$ & 1 & 0 & 0 \\
 		\end{tabular}
 
-		\item $(17.21)_8$
+		\item $(17.61)_8$
 		\item $(299.B)_{16}$
 	\end{enumerate}
 }
