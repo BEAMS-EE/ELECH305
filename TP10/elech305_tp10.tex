@@ -43,7 +43,7 @@
     \node (X) [draw, shape=circle, inner sep=0] {\strut #1};}
 
 
-\newcommand\version{v1.2.0}
+\newcommand\version{v1.3.0}
 
 %cyr
 \newcommand\textcyr[1]{{\fontencoding{OT2}\fontfamily{wncyr}\selectfont #1}}
@@ -538,7 +538,7 @@ Quelle est l'expression logique de $Z$ ?
 
 			Les k-maps et fonctions d'excitation sont maintenant immédiates~:
 			\begin{center}
-			\askmapiv{$D_1 = y_1\overline{a} + y_2\overline{a}b$}{a b $y_1$ $y_2$}{}{00110101-0--0000}{%
+			\askmapiv{$D_1 = y_1\overline{b} + y_2\overline{a}b$}{a b $y_1$ $y_2$}{}{00110101-0--0000}{%
 			\color{red}\put(0.1,0.1){\dashbox{0.1}(0.8,1.8){}}%
 			\color{red}\put(3.1,0.1){\dashbox{0.1}(0.8,1.8){}}%
 			\color{green}\put(1.1,1.1){\dashbox{0.2}(0.8,1.8){}}%
@@ -641,7 +641,7 @@ Calculer les fonctions d'excitation des organes de mémoire JKc pour l'automate 
 		$JK$ & \multicolumn{4}{c|}{$ab$} \\ \hline
 		$y_1y_2$ & 00 & 01 & 11 & 10 \\ \hline
 		00 & $\mu_0\mu_0$ & $\mu_0\mu_0$ & $\mu_0\mu_0$ & $\mu_0\varepsilon$ \\ \hline
-		01 & $\delta\mu_1$ & $\epsilon\delta$ & $\mu_0\delta$ & $\mu_0\mu_1$ \\ \hline
+		01 & $\epsilon\mu_1$ & $\epsilon\delta$ & $\mu_0\delta$ & $\mu_0\mu_1$ \\ \hline
 		11 & $\mu_1\mu_1$ & $\mu_1\delta$ & $\mu_1\mu_1$ & $\mu_1\mu_1$ \\ \hline
 		10 & $\delta\mu_0$ & $\mu_1\mu_0$ & $\mu_1\varepsilon$ & $\delta\varepsilon$ \\ \hline
 		\end{tabular}
@@ -653,7 +653,7 @@ Calculer les fonctions d'excitation des organes de mémoire JKc pour l'automate 
 		$J_1K_1$ & \multicolumn{4}{c|}{$ab$} \\ \hline
 		$y_1y_2$ & 00 & 01 & 11 & 10 \\ \hline
 		00 & $0-$ & $0-$ & $0-$ & $0-$ \\ \hline
-		01 & $-1$ & $1-$ & $0-$ & $0-$ \\ \hline
+		01 & $1-$ & $1-$ & $0-$ & $0-$ \\ \hline
 		11 & $-0$ & $-0$ & $-0$ & $-0$ \\ \hline
 		10 & $-1$ & $-0$ & $-0$ & $-1$ \\ \hline
 		\end{tabular}
@@ -673,10 +673,10 @@ Calculer les fonctions d'excitation des organes de mémoire JKc pour l'automate 
 	De ces tables de Huffman, on peut déduire les K-maps et donc les équations logiques des deux modules JK.
 
 	\begin{center}
-		\askmapiv{$J_1 = \overline{a}y_2$}{a b $y_1$ $y_2$}{}{0---01--00--00--}{}
+		\askmapiv{$J_1 = \overline{a}y_2$}{a b $y_1$ $y_2$}{}{01--01--00--00--}{}
 	\end{center}
 	\begin{center}
-		\askmapiv{$K_1 = \overline{y_1} + \overline{aby_2} + a\overline{b}y_2$}{a b $y_1$ $y_2$}{}{-110--00--01--00}{}
+		\askmapiv{$K_1 = \overline{aby_2} + a\overline{b}y_2$}{a b $y_1$ $y_2$}{}{--10--00--01--00}{}
 	\end{center}
 	\begin{center}
 		\askmapiv{$J_2 = a\overline{b} + ay_1$}{a b $y_1$ $y_2$}{}{0-0-0-0-1-1-0-1-}{}
