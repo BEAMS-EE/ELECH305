@@ -30,7 +30,7 @@
 \setlist[enumerate]{label=\alph*)}% If you want only the x-th level to use this format, use '[enumerate,x]'
 \usepackage{multirow}
 
-\newcommand\version{v1.0.0}
+\newcommand\version{v1.1.0}
 
 %cyr
 \newcommand\textcyr[1]{{\fontencoding{OT2}\fontfamily{wncyr}\selectfont #1}}
@@ -202,7 +202,7 @@ Simplifier les expressions suivantes par manipulations algébriques.
 	\reponse{
 		\begin{align*}
 		\overline{( (a+b) \overline{cd} + e + \overline{f} )} & = \overline{( a+b )} + \overline{( \overline{cd} )} \cdot \overline{e} f & \mbox{, de Morgan} \\
-		& = \overline{ab} + \overline{ac}
+		& = \overline{ab} + (c + d) \cdot \overline{e}f
 		\end{align*}
 	}
 
@@ -219,7 +219,7 @@ Simplifier les expressions suivantes par manipulations algébriques.
 		\begin{align*}
 		\overline{( ab + ac )} + \overline{ab}c & = (\overline{a} + \overline{b}) \cdot (\overline{a} + \overline{c}) + \overline{ab}c & \mbox{, de Morgan} \\
 		& = \overline{a} + \overline{ac} + \overline{ab} + \overline{bc} + \overline{ab}c & \mbox{, distribution} \\
-		& = \overline{a} \cdot (1 + \overline{c} + \overline{b} + \overline{b}c) & \mbox{, factorisation} \\
+		& = \overline{a} \cdot (1 + \overline{c} + \overline{b} + \overline{b}c) + \overline{bc} & \mbox{, factorisation} \\
 		& = \overline{a} + \overline{bc} & \mbox{, $1+x = 1$}
 		\end{align*}
 	}
@@ -227,8 +227,10 @@ Simplifier les expressions suivantes par manipulations algébriques.
 	\item $\overline{( a+b )}\overline{( \overline{a} + b )}$
 	\reponse{
 		\begin{align*}
-		\overline{( a+b )}\overline{( \overline{a} + b )} & = (\overline{ab}) \cdot (ab) & \mbox{, de Morgan} \\
-		& = 0 & \mbox{, $x \cdot \overline{x} = 0$}
+		\overline{( a+b )}\overline{( \overline{a} + b )} & = (\overline{ab}) + (ab) & \mbox{, de Morgan} \\
+		& = \overline{b} \cdot (\overline{a} + a ) & \mbox{, factorisation} \\
+		& = \overline{b} \cdot (1) & \mbox{, $x + \overline{x} = 1$} \\
+		& = \overline{b} & \mbox{, $x \cdot 1 = x$}
 		\end{align*}
 	}
 
@@ -306,7 +308,7 @@ Produits de sommes (PdS) et sommes de produits (SdP).
 	\reponse{
 		Écrire une fonction logique sous forme de mintermes revient à écrire sa forme disjonctive (SdP) canonique, c'est-à-dire développer tous les termes de la fonctions pour que toutes les variables apparaissent dans chaque terme.
 		\begin{multline*}
-			a\overline{b}cd + a\overline{b}c\overline{d} + \overline{ab}cd + \overline{ab}c\overline{d} + \overline{abc}d + \overline{abcd} + ab\overline{c}d
+			a\overline{b}cd + a\overline{b}c\overline{d} + \overline{abc}d + \overline{abcd} + ab\overline{c}d
 		\end{multline*}
 	}
 	\item $F(a,b,c,d) = ab + \overline{b}c + cd$
