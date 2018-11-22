@@ -77,7 +77,7 @@ tabsize=4}
 \usepackage{enumitem}
 \setlist[enumerate]{label=\alph*)}% If you want only the x-th level to use this format, use '[enumerate,x]'
 
-\newdateformat{mydate}{v1.1.0}%hack pour remplacer \THEYEAR
+\newdateformat{mydate}{v1.1.1}%hack pour remplacer \THEYEAR
 
 %cyr
 \newcommand\textcyr[1]{{\fontencoding{OT2}\fontfamily{wncyr}\selectfont #1}}
@@ -226,7 +226,7 @@ Le code \texttt{type-min-max.c} permet de remplir le tableau.
 
 \begin{center}
 	\begin{tabular}{|l|r|r|} \hline
-	Type & Minimum & Maximum \\ \hline
+	Type & Maximum & Minimum \\ \hline
 	int & 2147483647 & -2147483648 \\ \hline
 	unsigned int & 4294967295 & 0 \\ \hline
 	short & 32767 & -32768 \\ \hline
@@ -362,6 +362,113 @@ tabsize=4,
 
 
 
+%  #######     #####    ##      ##  ######     ########   ##########  ########     #####    ##      ##  
+% ##     ##  ##     ##  ###     ##  ##    ##      ##          ##         ##      ##     ##  ###     ##  
+% ##         ##     ##  ## ##   ##  ##     ##     ##          ##         ##      ##     ##  ## ##   ##  
+% ##         ##     ##  ##  ##  ##  ##     ##     ##          ##         ##      ##     ##  ##  ##  ##  
+% ##         ##     ##  ##   ## ##  ##     ##     ##          ##         ##      ##     ##  ##   ## ##  
+% ##     ##  ##     ##  ##     ###  ##    ##      ##          ##         ##      ##     ##  ##     ###  
+%  #######     #####    ##      ##  ######     ########       ##      ########     #####    ##      ##  
+\begin{Q} \textbf{Condition}
+
+Le code suivant présente la syntaxe de la structure conditionnelle \texttt{if}.
+
+\inputminted[%
+fontsize=\footnotesize,
+tabsize=4,
+]{c}{condition.c}
+
+La structure conditionnelle ternaire permet de condenser certaines parties du code.
+Cette structure fonctionne de la façon suivante~:
+
+\texttt{(foo == 1) ? /* résultat si condition vraie */ : /* résultat si condition fausse */;}
+
+Réécrivez le code du début de la question en utilisant des expressions ternaires.
+
+\ifnum\value{reponseCnt}=1
+  \lstinputlisting[language=c,%
+	commentstyle=\color{colComments}\textit,%
+	float=hbp,%
+	basicstyle=\ttfamily\footnotesize, %
+	identifierstyle=\color{colIdentifier}, %
+	keywordstyle=\color{colKeys}, %
+	stringstyle=\color{colString}, %
+  otherkeywords={bool},%
+	columns=flexible, %
+	tabsize=2, %
+	extendedchars=true, %
+	showspaces=false, %
+	showstringspaces=false, %
+	% numbers=left, %
+	numberstyle=\tiny, %
+	breaklines=true, %
+	breakautoindent=true, %
+	captionpos=b,%
+	frame=lines]{ternary.c}
+\fi
+\end{Q}
+
+
+
+
+
+
+
+% ##           #####      #####    ########   
+% ##         ##     ##  ##     ##  ##     ##  
+% ##         ##     ##  ##     ##  ##     ##  
+% ##         ##     ##  ##     ##  #######    
+% ##         ##     ##  ##     ##  ##         
+% ##         ##     ##  ##     ##  ##         
+% #########    #####      #####    ##        
+\begin{Q} \textbf{Loop}
+
+Il existe plusieurs façon d'exécuter une boucle en C : \texttt{while}, \texttt{for} et \texttt{do while}.
+Le code suivant présente leur syntaxe.
+
+Quelle sera la sortie dans les différentes boucles ?
+
+\inputminted[%
+fontsize=\footnotesize,
+tabsize=4,
+]{c}{loop.c}
+\end{Q}
+
+
+
+
+
+
+
+
+
+
+
+% ########     #####    ########   ##      ##  ##########  #########  ########   
+% ##     ##  ##     ##     ##      ###     ##      ##      ##         ##     ##  
+% ##     ##  ##     ##     ##      ## ##   ##      ##      ##         ##     ##  
+% #######    ##     ##     ##      ##  ##  ##      ##      ######     ########   
+% ##         ##     ##     ##      ##   ## ##      ##      ##         ##   ##    
+% ##         ##     ##     ##      ##     ###      ##      ##         ##    ##   
+% ##           #####    ########   ##      ##      ##      #########  ##     ## 
+\begin{Q} \textbf{Pointeurs}
+Le code ci-dessous présente le fonctionnement des pointeurs.
+Exécutez le code pour observer les changements de valeur et d'adresse.
+
+\inputminted[%
+fontsize=\footnotesize,
+tabsize=4,
+]{c}{pointeurs.c}
+\end{Q}
+
+
+
+
+
+
+
+
+
 
 
 
@@ -420,33 +527,6 @@ Chaque note étant comprise entre 0 et 20, un \texttt{char} suffit à contenir l
 La taille de la structure  est simplement la somme de la taille des variables la constituant.
 }
 
-\end{Q}
-
-
-
-
-
-
-
-
-
-
-
-% ########     #####    ########   ##      ##  ##########  #########  ########   
-% ##     ##  ##     ##     ##      ###     ##      ##      ##         ##     ##  
-% ##     ##  ##     ##     ##      ## ##   ##      ##      ##         ##     ##  
-% #######    ##     ##     ##      ##  ##  ##      ##      ######     ########   
-% ##         ##     ##     ##      ##   ## ##      ##      ##         ##   ##    
-% ##         ##     ##     ##      ##     ###      ##      ##         ##    ##   
-% ##           #####    ########   ##      ##      ##      #########  ##     ## 
-\begin{Q} \textbf{Pointeurs}
-Le code ci-dessous présente le fonctionnement des pointeurs.
-Exécutez le code pour observer les changements de valeur et d'adresse.
-
-\inputminted[%
-fontsize=\footnotesize,
-tabsize=4,
-]{c}{pointeurs.c}
 \end{Q}
 
 
@@ -570,86 +650,6 @@ Traduisez la chaîne de caractère suivante~: \texttt{char foo[64] = \{73, 32, 1
 I sure hope you did not convert this string by hand.
 
 Use printf.}
-\end{Q}
-
-
-
-
-
-
-
-
-
-%  #######     #####    ##      ##  ######     ########   ##########  ########     #####    ##      ##  
-% ##     ##  ##     ##  ###     ##  ##    ##      ##          ##         ##      ##     ##  ###     ##  
-% ##         ##     ##  ## ##   ##  ##     ##     ##          ##         ##      ##     ##  ## ##   ##  
-% ##         ##     ##  ##  ##  ##  ##     ##     ##          ##         ##      ##     ##  ##  ##  ##  
-% ##         ##     ##  ##   ## ##  ##     ##     ##          ##         ##      ##     ##  ##   ## ##  
-% ##     ##  ##     ##  ##     ###  ##    ##      ##          ##         ##      ##     ##  ##     ###  
-%  #######     #####    ##      ##  ######     ########       ##      ########     #####    ##      ##  
-\begin{Q} \textbf{Condition}
-
-Le code suivant présente la syntaxe de la structure conditionnelle \texttt{if}.
-
-\inputminted[%
-fontsize=\footnotesize,
-tabsize=4,
-]{c}{condition.c}
-
-La structure conditionnelle ternaire permet de condenser certaines parties du code.
-Cette structure fonctionne de la façon suivante~:
-
-\texttt{(foo == 1) ? /* résultat si condition vraie */ : /* résultat si condition fausse */;}
-
-Réécrivez le code du début de la question en utilisant des expressions ternaires.
-
-\ifnum\value{reponseCnt}=1
-  \lstinputlisting[language=c,%
-	commentstyle=\color{colComments}\textit,%
-	float=hbp,%
-	basicstyle=\ttfamily\footnotesize, %
-	identifierstyle=\color{colIdentifier}, %
-	keywordstyle=\color{colKeys}, %
-	stringstyle=\color{colString}, %
-  otherkeywords={bool},%
-	columns=flexible, %
-	tabsize=2, %
-	extendedchars=true, %
-	showspaces=false, %
-	showstringspaces=false, %
-	% numbers=left, %
-	numberstyle=\tiny, %
-	breaklines=true, %
-	breakautoindent=true, %
-	captionpos=b,%
-	frame=lines]{ternary.c}
-\fi
-\end{Q}
-
-
-
-
-
-
-
-% ##           #####      #####    ########   
-% ##         ##     ##  ##     ##  ##     ##  
-% ##         ##     ##  ##     ##  ##     ##  
-% ##         ##     ##  ##     ##  #######    
-% ##         ##     ##  ##     ##  ##         
-% ##         ##     ##  ##     ##  ##         
-% #########    #####      #####    ##        
-\begin{Q} \textbf{Loop}
-
-Il existe plusieurs façon d'exécuter une boucle en C : \texttt{while}, \texttt{for} et \texttt{do while}.
-Le code suivant présente leur syntaxe.
-
-Quelle sera la sortie dans les différentes boucles ?
-
-\inputminted[%
-fontsize=\footnotesize,
-tabsize=4,
-]{c}{loop.c}
 \end{Q}
 
 
@@ -1165,7 +1165,7 @@ Implémentez la méthode de Quine-McCluskey.
 
 
 \begin{Q}
-Écrivez une fonction permettant d'extraire les K-maps sous-jacentes d'une table de Huffman donnée paramètre.
+Écrivez une fonction permettant d'extraire les K-maps sous-jacentes d'une table de Huffman donnée en paramètre.
 \end{Q}
 
 \end{document}
