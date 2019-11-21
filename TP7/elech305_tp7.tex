@@ -34,7 +34,7 @@
 
 \usepackage{askmaps} % https://github.com/parastuffs/askmaps_custom
 
-\newcommand\version{v1.0.0}
+\newcommand\version{v1.0.1}
 
 %cyr
 \newcommand\textcyr[1]{{\fontencoding{OT2}\fontfamily{wncyr}\selectfont #1}}
@@ -190,7 +190,7 @@ Dresser la table de Huffman pour les graphes suivants :
 
   \node[state]         (A)              {$A$\\ Z=0};
   \node[state]         (B) [right of=A] {$B$\\ Z=0};
-  \node[state]         (C) [right of=B] {$C$\\ Z=A};
+  \node[state]         (C) [right of=B] {$C$\\ Z=1};
 
   \path (A) edge			  node {x=1} (B)
         	edge [loop below] node {0} (A)
@@ -210,8 +210,6 @@ Dresser la table de Huffman pour les graphes suivants :
 \end{tabular}
 \end{center}
 }
-
-\item ~\\
 
 \end{enumerate}
 \end{Q}
