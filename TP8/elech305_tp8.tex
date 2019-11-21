@@ -36,7 +36,7 @@
 
 \usepackage{askmaps} % https://github.com/parastuffs/askmaps_custom
 
-\newcommand\version{v1.0.0}
+\newcommand\version{v1.0.1}
 
 %cyr
 \newcommand\textcyr[1]{{\fontencoding{OT2}\fontfamily{wncyr}\selectfont #1}}
@@ -363,8 +363,8 @@ pdfsubject={}
 			        (B) edge [bend right] node {11,10} (A)
 			        	edge [bend left]  node {00, 01} (C)
 			        (C) edge [loop right]  node {00, 01, 11, 10} (D)
-			        (D) edge [loop left]  node {00, 01} (D)
-			            edge [bend right]  node {11, 10} (C);
+			        (D) edge [loop left]  node {11, 10} (D)
+			            edge [bend right]  node {00, 01} (C);
 			\end{tikzpicture}
 			\end{center}
 		}
