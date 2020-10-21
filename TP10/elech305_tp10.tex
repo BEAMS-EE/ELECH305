@@ -43,7 +43,7 @@
     \node (X) [draw, shape=circle, inner sep=0] {\strut #1};}
 
 
-\newcommand\version{v1.3.0}
+\newcommand\version{v1.3.1}
 
 %cyr
 \newcommand\textcyr[1]{{\fontencoding{OT2}\fontfamily{wncyr}\selectfont #1}}
@@ -192,11 +192,11 @@ Calculer les fonctions internes $Z_1$ et $Z_2$.
 	\end{center}
 
 	\begin{center}
-			\askmapv{$Z_1 = \overline{y_1}y_2$}{a b $y_1$ $y_2$ $y_3$}{}{00--001-00110011--------00-0----}{}
+			\askmapv{$Z_1 = y_2$}{$y_1$ a b $y_2$ $y_3$}{}{00--001-00110011--------00------}{}
 	\end{center}
 
 	\begin{center}
-			\askmapv{$Z_2 = \overline{ba}y_3 + b\overline{y_2}y_3 + y_2\overline{y_3}$}{$y_1$ a b $y_2$ $y_3$}{}{01--00100110-11---------00-0----}{}
+			\askmapv{$Z_2 = \overline{ab}y_3 + a\overline{y_1y_2}y_3 + y_2\overline{y_3}$}{$y_1$ a b $y_2$ $y_3$}{}{01--00100110-11---------00-0----}{}
 	\end{center}
 
 }
@@ -228,7 +228,7 @@ Quelle est l'expression logique de $Z$ ?
 	\end{center}
 
 	\begin{center}
-			\askmapiv{$Z = \overline{y_2} + ab$}{a b $y_1$ $y_2$}{}{1-1010-0-010111-}{}
+			\askmapiv{$Z = \overline{y_2} + ab$}{a b $y_1$ $y_2$}{}{1-10-0-0-010111-}{}
 	\end{center}
 }
 \end{Q}
