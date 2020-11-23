@@ -41,7 +41,7 @@
     \node (X) [draw, shape=circle, inner sep=0] {\strut #1};}
 
 
-\newcommand\version{v1.3.0}
+\newcommand\version{v1.4.0}
 
 %cyr
 \newcommand\textcyr[1]{{\fontencoding{OT2}\fontfamily{wncyr}\selectfont #1}}
@@ -56,7 +56,7 @@
 \setboolean{corrige}{true}%corrigé
 \fi
 
-%\setboolean{corrige}{false}% pas de corrigé
+% \setboolean{corrige}{true}% pas de corrigé
 
 \newboolean{annexes}
 \setboolean{annexes}{true}%annexes
@@ -446,7 +446,7 @@ Dans la table des états de Huffman suivante~:
 		\end{center}
 
 		\begin{center}
-			\askmapiv{$Y_2 = a\overline{y_1y_2} + \overline{ab}y_1 + by_1y_2$}{a b $y_1$ $y_2$}{}{00110-01-0101011}{}
+			\askmapiv{$Y_2 = a\overline{y_2} + \overline{ab}y_1 + by_1y_2$}{a b $y_1$ $y_2$}{}{00110-01-0101011}{}
 		\end{center}
 
 		\begin{center}
