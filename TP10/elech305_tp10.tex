@@ -43,7 +43,7 @@
     \node (X) [draw, shape=circle, inner sep=0] {\strut #1};}
 
 
-\newcommand\version{v1.4.0}
+\newcommand\version{v1.4.1}
 
 %cyr
 \newcommand\textcyr[1]{{\fontencoding{OT2}\fontfamily{wncyr}\selectfont #1}}
@@ -638,7 +638,7 @@ Calculer les fonctions d'excitation des organes de mémoire JKc pour l'automate 
 	On peut réécrire la table de Huffman~:
 	\begin{center}
 		\begin{tabular}{|c|c|c|c|c|}\hline
-		$JK$ & \multicolumn{4}{c|}{$ab$} \\ \hline
+		$Q^+_1 Q^+_2$ & \multicolumn{4}{c|}{$ab$} \\ \hline
 		$y_1y_2$ & 00 & 01 & 11 & 10 \\ \hline
 		00 & $\mu_0\mu_0$ & $\mu_0\mu_0$ & $\mu_0\mu_0$ & $\mu_0\varepsilon$ \\ \hline
 		01 & $\epsilon\mu_1$ & $\epsilon\delta$ & $\mu_0\delta$ & $\mu_0\mu_1$ \\ \hline
@@ -676,7 +676,7 @@ Calculer les fonctions d'excitation des organes de mémoire JKc pour l'automate 
 		\askmapiv{$J_1 = \overline{a}y_2$}{a b $y_1$ $y_2$}{}{01--01--00--00--}{}
 	\end{center}
 	\begin{center}
-		\askmapiv{$K_1 = \overline{aby_2} + a\overline{b}y_2$}{a b $y_1$ $y_2$}{}{--10--00--01--00}{}
+		\askmapiv{$K_1 = \overline{by_2}$}{a b $y_1$ $y_2$}{}{--10--00--10--00}{}
 	\end{center}
 	\begin{center}
 		\askmapiv{$J_2 = a\overline{b} + ay_1$}{a b $y_1$ $y_2$}{}{0-0-0-0-1-1-0-1-}{}
