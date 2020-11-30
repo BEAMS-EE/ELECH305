@@ -43,7 +43,7 @@
     \node (X) [draw, shape=circle, inner sep=0] {\strut #1};}
 
 
-\newcommand\version{v1.3.1}
+\newcommand\version{v1.4.0}
 
 %cyr
 \newcommand\textcyr[1]{{\fontencoding{OT2}\fontfamily{wncyr}\selectfont #1}}
@@ -58,7 +58,7 @@
 \setboolean{corrige}{true}%corrigé
 \fi
 
-%\setboolean{corrige}{false}% pas de corrigé
+% \setboolean{corrige}{true}% pas de corrigé
 
 \newboolean{annexes}
 \setboolean{annexes}{true}%annexes
@@ -180,11 +180,11 @@ Calculer les fonctions internes $Z_1$ et $Z_2$.
 
 	On en déduit les K-maps suivantes~:
 	\begin{center}
-			\askmapv{$Y_1 = b\overline{ay_2y_3} + y_1\overline{y_2}$}{$y_1$ a b $y_2$ $y_3$}{}{0000000010000000--------11-0----}{}
+			\askmapv{$Y_1 = a\overline{by_2y_3} + y_1\overline{y_2}$}{$y_1$ a b $y_2$ $y_3$}{}{0000000010000000--------11-0----}{}
 	\end{center}
 
 	\begin{center}
-			\askmapv{$Y_2 = y_1y_3 + by_2 + ay_2\overline{y_3}$}{$y_1$ a b $y_2$ $y_3$}{}{0000001000110011--------01-1----}{}
+			\askmapv{$Y_2 = y_1y_3 + ay_2 + by_2\overline{y_3}$}{$y_1$ a b $y_2$ $y_3$}{}{0000001000110011--------01-1----}{}
 	\end{center}
 
 	\begin{center}
