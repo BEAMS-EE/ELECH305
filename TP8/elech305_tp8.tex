@@ -36,7 +36,7 @@
 
 \usepackage{askmaps} % https://github.com/parastuffs/askmaps_custom
 
-\newcommand\version{v1.1.0}
+\newcommand\version{v1.1.1}
 
 %cyr
 \newcommand\textcyr[1]{{\fontencoding{OT2}\fontfamily{wncyr}\selectfont #1}}
@@ -353,13 +353,13 @@ pdfsubject={}
 			\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=4.5cm,semithick,align=center]
 			  \tikzstyle{every state}=[fill=white,text=black]
 
-			  \node[state]         (A)              {$0$\\ Z=0};
-			  \node[state]         (B) [right of=A] {$0$\\ Z=0};
-			  \node[state]         (D) [below of=A] {$1$\\ Z=1};
-			  \node[state]         (C) [below of=B] {$1$\\ Z=0};
+			  \node[state]         (A)              {$Y_1Y_2=00$\\ Z=0};
+			  \node[state]         (B) [right of=A] {$01$\\ Z=0};
+			  \node[state]         (D) [below of=A] {$10$\\ Z=1};
+			  \node[state]         (C) [below of=B] {$11$\\ Z=0};
 
 			  \path (A) edge [bend right] node {1} (D)
-						edge [loop left]  node {0} (A)
+						edge [loop left]  node {$a=0$} (A)
 			        (B) edge [bend right] node {1} (A)
 			        	edge [bend left]  node {0} (C)
 			        (C) edge [loop right]  node {0, 1} (D)
