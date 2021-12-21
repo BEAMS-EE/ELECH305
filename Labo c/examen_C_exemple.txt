@@ -1,0 +1,91 @@
+Exemples de questions d'examen pour la partie C de ELECH305.
+
+1. Que font les lignes suivantes ?
+
+#define START  0              
+#define ENDING 9              
+#define M1(A,B) ((A)>(B)?(A):(B))
+#define M2(A,B) ((A)>(B)?(B):(A))
+
+2. En quoi les fonctions F1 et F2 sont-elles différentes ?
+Que sera-t-il affiché dans le terminal après les printf ?
+
+#include <stdio.h>
+#include <stdlib.h>
+
+void F1(int a, int b, int c);
+void F2(int *a, int *b, int *c);
+
+int main()
+{
+	int a, b, c;
+
+	a=3;
+	b=5;
+	c=7;	
+
+	F1(a,b,c);
+	printf("1: %d",c);
+	F2(&a,&b,&c);
+	printf("2: %d",c);
+}
+
+void F1(a,b,c){
+	c=a+b;
+}
+
+void F2(*a, *b, *c){
+	*c=*a+*b;
+}
+
+3. Écrire une fonction C qui vérifie si un nombre donné fourni comme un argument se trouve dans un tableau dont on ne connaît pas la taille au moment de compilation. Indiquer clairement tous les arguments de la fonction. Écrire un programme qui utilise cette fonction et qui définit tous les arguments nécessaires (on suppose que le tableau est rempli avec des valeurs arbitraires).
+
+
+4. Complétez le code suivant pour que le nombre entier entré par l'utilisateur soit affiché en base 8.
+    int main()
+    {
+        int in;
+        scanf("%i",&in);
+        // ...
+        return EXIT_SUCCESS;
+    }
+    
+5. Indiquez le résultat des différents printf du code suivant. Justifiez vos réponses.
+    #include <stdio.h>
+    #include <stdlib.h>
+    typedef struct MaStruct MaStruct;
+    struct MaStruct{
+        int a;
+        char b[4];
+        long c;
+    };
+    intmain()
+    {
+        MaStruct a;
+        int b = 42;
+        int * c = malloc(sizeof(int));
+        *c = b;
+        b = 12;
+        printf("b = %i, c = %i\n", b, *c);
+        c = &b;
+        b = 14;
+        printf("b = %i, c = %i\n", b, *c);
+        printf("%i\n", sizeof(a));
+        return EXIT_SUCCESS;
+    }
+
+
+6. Expliquez ce qui se passera lors de la compilation et de l’exécution du programme suivant.
+Modifier le programme afin qu’il puisse être tout à fait opérationnel.
+    int myFunc (int a, unsigned char b)
+    {
+        int c;
+        c = a + b;
+        return c;
+    }
+
+7. Écrivez une fonction SOMME en C permettant de calculer la somme des deux tableaux d’un
+nombre arbitraire d’éléments (vous pouvez choisir librement le type des données des trois tableaux, deux
+tableaux d’opérandes et un tableau de résultat). Le passage des paramètres nécessaires à la
+fonction se fera à l’aide des pointeurs (là où cela vous semble nécessaire). La fonction
+SOMME sera appelée de la fonction main(). Vous pouvez aussi créer librement les vecteurs d’entrée.
